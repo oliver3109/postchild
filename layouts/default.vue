@@ -1,54 +1,123 @@
 <template>
-  <v-app dark>
-    <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" fixed app>
-      <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-app-bar fixed app>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title v-text="title" />
-      <v-spacer />
-    </v-app-bar>
-    <v-main>
-      <v-container>
-        <nuxt />
-      </v-container>
-    </v-main>
-    <v-footer app>
-      <span>&copy; {{ new Date().getFullYear() }} postchild</span>
-    </v-footer>
-  </v-app>
+  <div class="app">
+    <div class="app__contanier">
+      <div class="app__contanier__left">
+        <div class="app__contanier__left__item">
+          {{ $t('app.navigation.home') }}
+        </div>
+        <div class="app__contanier__left__item">
+          {{ $t('app.navigation.reaitime') }}
+        </div>
+      </div>
+      <div class="app__contanier__right">
+        <div class="app__contanier__right__title">Postchild</div>
+        <div class="app__contanier__right__content">
+          <nuxt />
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      drawer: false,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'home',
-          to: '/',
-        },
-      ],
-      miniVariant: false,
-      title: 'Postchild',
-    }
-  },
+<style lang="scss">
+*,
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  &::selection {
+    color: #000000;
+    background-color: $theme-color-04;
+  }
 }
-</script>
+.app {
+  background-color: rgba($theme-color-05, 0.8);
+  min-height: 100vh;
+  display: flex;
+  flex-flow: column nowrap;
+  &__contanier {
+    display: flex;
+    &__left {
+      min-height: 100vh;
+      min-width: 80px;
+      background-color: $theme-color-05;
+      text-align: center;
+      padding: 10px 0px;
+      &__item {
+        width: 60px;
+        height: 60px;
+        border-radius: 15px;
+        background-color: $theme-color-02;
+        margin: 0 auto 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #000000;
+        font-size: 14px;
+      }
+    }
+    &__right {
+      display: flex;
+      flex-flow: column nowrap;
+      width: 100%;
+      &__title {
+        font-size: 32px;
+        font-weight: 900;
+        color: $theme-color-01;
+        margin: 10px 0px 0px 20px;
+      }
+      &__content {
+        padding: 20px;
+        height: 100%;
+      }
+    }
+  }
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+input {
+  line-height: 31px !important;
+  height: 31px !important;
+}
+
+select,
+input {
+  line-height: 35px;
+  height: 35px;
+  outline: none;
+  border: 2px solid $theme-color-10;
+  background-color: $theme-color-10;
+  border-radius: 7px;
+  padding: 0px 10px;
+  font-size: 16px;
+  color: #ffffff;
+  &:hover,
+  &:focus {
+    border: 2px solid $theme-color-01;
+  }
+  &::selection {
+    color: #000000;
+    background-color: $theme-color-04;
+  }
+}
+
+button {
+  border: 2px solid $theme-color-01;
+  outline: none;
+  border-radius: 7px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  &:hover,
+  &:focus {
+    border: 2px solid #fff;
+  }
+}
+</style>
