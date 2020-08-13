@@ -12,10 +12,9 @@ branches:
 
 install:
   - npm install
-  - npm run generate
 
 script:
-  - echo "Skipping tests"
+  - npm run generate
 
 deploy:
   provider: pages
