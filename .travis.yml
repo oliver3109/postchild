@@ -14,6 +14,9 @@ install:
   - npm install
   - npm run generate
 
+script:
+  - npm run test
+
 deploy:
   provider: pages
   skip-cleanup: true

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
