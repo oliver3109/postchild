@@ -48,10 +48,19 @@ const messages = {
   },
 }
 
-// Create VueI18n instance with options
-const i18n = new VueI18n({
-  locale: 'en', // set locale
-  messages, // set locale messages
-})
+let i18n = null
+
+export default ({ app, store }) => {
+  // Set i18n instance on app
+  // This way we can use it in middleware and pages asyncData/fetch
+  i18n = new VueI18n({
+    locale: store.state.locale, // set locale
+    fallbackLocale: 'zhHans',
+    messages, // set locale messages
+  })
+}
 
 Vue.prototype.$t = (key, ...params) => i18n.t(key, params)
+Vue.prototype.$setLang = (lang) => {
+  i18n.locale = lang
+}

@@ -10,7 +10,22 @@
         </div>
       </div>
       <div class="app__contanier__right">
-        <div class="app__contanier__right__title">Postchild</div>
+        <div class="app__contanier__right__header">
+          <div class="app__contanier__right__header__title">Postchild</div>
+          <div class="app__contanier__right__header__tool">
+            <div class="app__contanier__right__header__tool__item">
+              <DropDownMenu
+                :options="[
+                  { value: 'zhHans', label: '简体中文' },
+                  { value: 'en', label: 'English' },
+                ]"
+                @click="onClickLanguage"
+              >
+                <i class="material-icons">translate</i>
+              </DropDownMenu>
+            </div>
+          </div>
+        </div>
         <div class="app__contanier__right__content">
           <nuxt />
         </div>
@@ -18,6 +33,17 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    onClickLanguage(item) {
+      this.$setLang(item.value)
+      this.$store.commit('setLang', item.value)
+    },
+  },
+}
+</script>
 
 <style lang="scss">
 *,
@@ -61,11 +87,29 @@ body {
       display: flex;
       flex-flow: column nowrap;
       width: 100%;
-      &__title {
-        font-size: 32px;
-        font-weight: 900;
-        color: $theme-color-01;
-        margin: 10px 0px 0px 20px;
+      &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 67px;
+        &__title {
+          font-size: 32px;
+          font-weight: 900;
+          color: $theme-color-01;
+          margin-left: 20px;
+        }
+        &__tool {
+          margin-right: 20px;
+          &__item {
+            height: 67px;
+            line-height: 67px;
+            display: flex;
+            align-items: center;
+          }
+          i {
+            font-size: 26px;
+          }
+        }
       }
       &__content {
         padding: 20px;
