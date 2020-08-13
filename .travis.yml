@@ -12,8 +12,6 @@ branches:
 
 install:
   - npm install
-
-script:
   - npm run generate
 
 deploy:
