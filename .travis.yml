@@ -1,10 +1,5 @@
 language: node_js
-node_js:
-  - '8'
-
-cache:
-  directories:
-    - 'node_modules'
+node_js: node
 
 branches:
   only:
@@ -12,15 +7,16 @@ branches:
 
 install:
   - npm install
-  - npm run generate
 
 script:
-  - echo "Skipping tests"
+  - npm run build
+  - npm run generate
 
 deploy:
   provider: pages
   skip-cleanup: true
   github-token: $GITHUB_ACCESS_TOKEN
+  keep-history: true
   target-branch: gh-pages
   local-dir: dist
   on:
