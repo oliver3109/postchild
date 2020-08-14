@@ -1,12 +1,13 @@
 <template>
   <div class="home">
+    <!-- base info of http request -->
     <div class="request">
       <div class="title">{{ $t('app.home.request') }}</div>
       <div class="panel">
         <div class="method">
           <div class="label">{{ $t('app.home.method') }}</div>
           <div class="flex">
-            <select>
+            <select v-model="method">
               <option value="GET">GET</option>
               <option value="POST">POST</option>
               <option value="HEAD">HEAD</option>
@@ -20,8 +21,8 @@
         <div class="url">
           <div class="label">{{ $t('app.home.url') }}</div>
           <div class="flex">
-            <input />
-            <button class="send">
+            <input v-model="url" />
+            <button class="send" @click="onClickSend">
               {{ $t('app.home.send') }}<i class="material-icons">send</i>
             </button>
           </div>
@@ -29,18 +30,20 @@
       </div>
     </div>
 
-    <div class="tabs">
+    <!-- switch tab of http request data -->
+    <div class="request-data-tabs">
       <div
-        v-for="item in tabs"
+        v-for="item in requestDataTabs"
         :key="item.title"
         :class="{ item: true, 'item--active': item.active }"
-        @click="onClickTab(item.title)"
+        @click="onClickRequestDataTab(item.title)"
       >
         {{ $t('app.home.' + item.title) }}
       </div>
     </div>
 
-    <div v-show="tab === 'parameter'" class="parameters">
+    <!-- http parameter config -->
+    <div v-show="requestDataTab === 'parameter'" class="parameters">
       <div class="title">{{ $t('app.home.parameter') }}</div>
       <div class="panel">
         <div v-if="parameters.length > 0" class="parameters__list">
@@ -74,7 +77,8 @@
       </div>
     </div>
 
-    <div v-show="tab === 'header'" class="header">
+    <!-- http header config -->
+    <div v-show="requestDataTab === 'header'" class="header">
       <div class="title">{{ $t('app.home.header') }}</div>
       <div class="panel">
         <div v-if="headers.length > 0" class="parameters__list">
@@ -104,11 +108,37 @@
       </div>
     </div>
 
+    <!-- http reponse result -->
     <div class="reponse">
       <div class="title">{{ $t('app.home.response') }}</div>
       <div class="panel">
         <div class="status">{{ $t('app.home.statusCode') }}</div>
-        <div class="json">({{ $t('app.home.waiting') }})</div>
+        <div class="status-value">({{ $t('app.home.waiting') }})</div>
+        <div class="tabs">
+          <div
+            v-for="item in responseUiTabs"
+            :key="item.title"
+            :class="{ item: true, 'item--active': item.active }"
+            @click="onClickResponseUiTab(item.title)"
+          >
+            {{ $t('app.home.' + item.title) }}
+          </div>
+        </div>
+        <div class="result">
+          <div class="result__header">
+            <div class="result__header__title">
+              {{ $t('app.home.response') }}
+            </div>
+            <div class="result__header__tool">
+              <i class="material-icons">
+                content_copy
+              </i>
+            </div>
+          </div>
+          <div class="result__view">
+            <code-editor readonly :value="response" />
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -118,27 +148,35 @@
 export default {
   data() {
     return {
-      tab: 'parameter',
-      tabs: [
+      method: 'GET',
+      url: '',
+      requestDataTab: 'parameter',
+      requestDataTabs: [
         { title: 'parameter', active: true },
         { title: 'header', active: false },
       ],
       parameters: [],
       headers: [],
+      responseUiTab: 'json',
+      responseUiTabs: [
+        { title: 'json', active: true },
+        { title: 'headers', active: false },
+      ],
+      response: null,
     }
   },
+
   methods: {
-    onClickTab(title) {
-      this.tab = title
-      this.tabs.map((item, index) => {
+    onClickRequestDataTab(title) {
+      this.requestDataTab = title
+      this.requestDataTabs.map((item, index) => {
         if (item.title === title) {
-          this.$set(this.tabs[index], 'active', true)
+          this.$set(this.requestDataTabs[index], 'active', true)
         } else {
-          this.$set(this.tabs[index], 'active', false)
+          this.$set(this.requestDataTabs[index], 'active', false)
         }
       })
     },
-
     onClickAddParameter() {
       this.parameters.push({
         key: undefined,
@@ -152,7 +190,6 @@ export default {
     onClickDeleteAllParameter() {
       this.parameters = []
     },
-
     onClickAddHeader() {
       this.headers.push({
         key: undefined,
@@ -164,6 +201,23 @@ export default {
     },
     onClickDeleteAllHeader() {
       this.headers = []
+    },
+    onClickResponseUiTab(title) {
+      this.responseUiTab = title
+      this.responseUiTabs.map((item, index) => {
+        if (item.title === title) {
+          this.$set(this.responseUiTabs[index], 'active', true)
+        } else {
+          this.$set(this.responseUiTabs[index], 'active', false)
+        }
+      })
+    },
+    onClickSend() {
+      this.response = JSON.stringify(
+        { name: 'oliver', sex: 'male', age: '23' },
+        null,
+        2
+      )
     },
   },
 }
@@ -221,7 +275,7 @@ export default {
     }
   }
 
-  .tabs {
+  .request-data-tabs {
     margin-top: 20px;
     margin-right: 20px;
     line-height: 35px;
@@ -315,11 +369,6 @@ export default {
 
   .reponse {
     margin-top: 20px;
-    .panel {
-      background-color: $theme-color-05;
-      border-radius: 10px;
-      padding: 25px 13px;
-    }
     .title {
       margin-left: 13px;
       color: #742cd8;
@@ -329,13 +378,57 @@ export default {
     .status {
       font-size: 15px;
       color: #dcdcdc;
+      &-value {
+        margin-top: 5px;
+        padding: 10px;
+        border-radius: 10px;
+        background-color: rgba($color: #000, $alpha: 0.2);
+        color: $theme-color-06;
+      }
     }
-    .json {
-      margin-top: 5px;
-      padding: 10px;
+    .panel {
+      background-color: $theme-color-05;
       border-radius: 10px;
-      background-color: rgba($color: #000, $alpha: 0.2);
-      color: $theme-color-06;
+      padding: 25px 13px;
+      .tabs {
+        margin-top: 20px;
+        margin-right: 20px;
+        line-height: 35px;
+        height: 35px;
+        font-size: 16px;
+        display: flex;
+        justify-content: left;
+        align-items: center;
+        color: $theme-color-02;
+        border-radius: 10px;
+        .item {
+          margin-right: 5px;
+          padding: 3px 10px;
+          border-radius: 10px;
+          cursor: pointer;
+          &--active {
+            background-color: rgba($color: #000, $alpha: 0.2);
+          }
+        }
+      }
+      .result {
+        margin: 15px 0;
+        &__header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          &__title {
+            font-size: 15px;
+            color: #dcdcdc;
+          }
+          i {
+            cursor: pointer;
+            &:hover {
+              color: $theme-color-01;
+            }
+          }
+        }
+      }
     }
   }
 }
