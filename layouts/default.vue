@@ -5,9 +5,9 @@
         <div class="app__contanier__left__item">
           {{ $t('app.navigation.home') }}
         </div>
-        <div class="app__contanier__left__item">
+        <!-- <div class="app__contanier__left__item">
           {{ $t('app.navigation.reaitime') }}
-        </div>
+        </div> -->
       </div>
       <div class="app__contanier__right">
         <div class="app__contanier__right__header">
@@ -29,6 +29,10 @@
         <div class="app__contanier__right__content">
           <nuxt />
         </div>
+        <footer class="app__contanier__right__footer">
+          <div>v0.0.1</div>
+          <div style="margin-left: 30px;">Powered by Oliver</div>
+        </footer>
       </div>
     </div>
   </div>
@@ -115,6 +119,13 @@ body {
       &__content {
         padding: 20px;
         height: 100%;
+      }
+      &__footer {
+        display: flex;
+        align-items: center;
+        line-height: 70px;
+        margin-left: 50px;
+        color: $theme-color-03;
       }
     }
   }

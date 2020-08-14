@@ -9,12 +9,12 @@
           <div class="flex">
             <select v-model="method">
               <option value="GET">GET</option>
-              <option value="POST">POST</option>
+              <!-- <option value="POST">POST</option>
               <option value="HEAD">HEAD</option>
               <option value="PUT">PUT</option>
               <option value="DELETE">DELETE</option>
               <option value="CONNECT">CONNECT</option>
-              <option value="OPTIONS">OPTIONS</option>
+              <option value="OPTIONS">OPTIONS</option> -->
             </select>
           </div>
         </div>
@@ -95,8 +95,16 @@
             :key="index"
             class="parameters__list__item"
           >
-            <input class="key" :placeholder="'header ' + (index + 1)" />
-            <input class="value" :placeholder="'value ' + (index + 1)" />
+            <input
+              v-model="headers[index].key"
+              class="key"
+              :placeholder="'header ' + (index + 1)"
+            />
+            <input
+              v-model="headers[index].value"
+              class="value"
+              :placeholder="'value ' + (index + 1)"
+            />
             <i class="material-icons" @click="onClickDeleteHeader(index)">
               delete
             </i>
@@ -113,7 +121,15 @@
       <div class="title">{{ $t('app.home.response') }}</div>
       <div class="panel">
         <div class="status">{{ $t('app.home.statusCode') }}</div>
-        <div class="status-value">({{ $t('app.home.waiting') }})</div>
+        <div
+          class="status-value"
+          :class="{
+            'status-value--ok': statusCode && statusCode == 200,
+            'status-value--fail': statusCode && statusCode !== 200,
+          }"
+        >
+          {{ statusCode || '(' + $t('app.home.waiting') + ')' }}
+        </div>
         <div class="tabs">
           <div
             v-for="item in responseUiTabs"
@@ -145,6 +161,8 @@
 </template>
 
 <script>
+import { httpRequest } from '../helpers/axios'
+
 export default {
   data() {
     return {
@@ -160,8 +178,9 @@ export default {
       responseUiTab: 'json',
       responseUiTabs: [
         { title: 'json', active: true },
-        { title: 'headers', active: false },
+        // { title: 'headers', active: false },
       ],
+      statusCode: null,
       response: null,
     }
   },
@@ -213,10 +232,11 @@ export default {
       })
     },
     onClickSend() {
-      this.response = JSON.stringify(
-        { name: 'oliver', sex: 'male', age: '23' },
-        null,
-        2
+      httpRequest(this.method, this.url, this.parameters, this.headers).then(
+        (res) => {
+          this.statusCode = res.status
+          this.response = res.data
+        }
       )
     },
   },
@@ -384,6 +404,12 @@ export default {
         border-radius: 10px;
         background-color: rgba($color: #000, $alpha: 0.2);
         color: $theme-color-06;
+        &--ok {
+          color: #62ff00;
+        }
+        &--fail {
+          color: #960000;
+        }
       }
     }
     .panel {
