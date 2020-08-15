@@ -22,7 +22,8 @@ export default {
   name: 'CodeEditor',
   props: {
     value: { type: String, default: '' },
-    readonly: { type: Boolean, value: false },
+    readonly: { type: Boolean, default: false },
+    mode: { type: String, default: 'js' },
   },
   data() {
     return {
@@ -35,6 +36,9 @@ export default {
     value(v) {
       this.aceEditor.getSession().setValue(v)
     },
+    mode(v) {
+      this.setMode(v)
+    },
   },
   mounted() {
     this.aceEditor = ace.edit(this.$refs.ace, {
@@ -42,6 +46,7 @@ export default {
       minLines: 10,
       fontSize: 16,
       readOnly: this.$props.readonly,
+      value: this.$props.value,
       theme: this.themePath,
       mode: this.modePath,
       wrap: false,
@@ -60,6 +65,16 @@ export default {
     change() {
       this.$emit('input', this.aceEditor.getSession().getValue())
     },
+    setMode(type) {
+      let mode = ''
+      if (type === 'js') {
+        mode = 'ace/mode/javascript'
+      }
+      if (type === 'html') {
+        mode = 'ace/mode/html'
+      }
+      this.aceEditor.getSession().setMode(mode)
+    },
   },
 }
 </script>
@@ -68,6 +83,7 @@ export default {
 .code-editor-container {
   .code-editor {
     border-radius: 7px;
+    margin: 7px 0;
   }
 }
 </style>

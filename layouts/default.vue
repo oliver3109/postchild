@@ -30,7 +30,7 @@
           <nuxt />
         </div>
         <footer class="app__contanier__right__footer">
-          <div>v0.0.1</div>
+          <div>v0.0.2</div>
           <div style="margin-left: 30px;">Powered by Oliver</div>
         </footer>
       </div>

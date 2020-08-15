@@ -4,27 +4,69 @@
     <div class="request">
       <div class="title">{{ $t('app.home.request') }}</div>
       <div class="panel">
-        <div class="method">
-          <div class="label">{{ $t('app.home.method') }}</div>
-          <div class="flex">
-            <select v-model="method">
-              <option value="GET">GET</option>
-              <!-- <option value="POST">POST</option>
-              <option value="HEAD">HEAD</option>
-              <option value="PUT">PUT</option>
-              <option value="DELETE">DELETE</option>
-              <option value="CONNECT">CONNECT</option>
-              <option value="OPTIONS">OPTIONS</option> -->
-            </select>
+        <div class="row1">
+          <div class="method">
+            <div class="label">{{ $t('app.home.method') }}</div>
+            <div class="flex">
+              <select v-model="method">
+                <option value="GET">GET</option>
+                <option value="HEAD">HEAD</option>
+                <option value="POST">POST</option>
+                <option value="PUT">PUT</option>
+                <option value="DELETE">DELETE</option>
+                <!-- <option value="CONNECT">CONNECT</option> -->
+                <option value="OPTIONS">OPTIONS</option>
+                <option value="PATCH">PATCH</option>
+                <!-- <option value="TRACE">TRACE</option> -->
+              </select>
+            </div>
+          </div>
+          <div class="url">
+            <div class="label">{{ $t('app.home.url') }}</div>
+            <div class="flex">
+              <input v-model="url" type="text" />
+              <button class="send" @click="onClickSend">
+                {{ $t('app.home.send') }}<i class="material-icons">send</i>
+              </button>
+            </div>
           </div>
         </div>
-        <div class="url">
-          <div class="label">{{ $t('app.home.url') }}</div>
-          <div class="flex">
-            <input v-model="url" />
-            <button class="send" @click="onClickSend">
-              {{ $t('app.home.send') }}<i class="material-icons">send</i>
-            </button>
+        <div
+          v-if="
+            method === 'POST' ||
+            method === 'PUT' ||
+            method === 'DELETE' ||
+            method === 'PATCH'
+          "
+          class="row2"
+        >
+          <div class="content-type-title">{{ $t('app.home.contentType') }}</div>
+          <div class="content-type-input">
+            <input v-model="contentType" type="text" list="contentTypeList" />
+            <datalist id="contentTypeList">
+              <option value="application/json" />
+              <option value="application/vnd.api+json" />
+              <option value="application/hal+json" />
+              <option value="application/xml" />
+              <option value="application/x-www-form-urlencoded" />
+              <option value="text/html" />
+            </datalist>
+          </div>
+        </div>
+        <div
+          v-if="
+            method === 'POST' ||
+            method === 'PUT' ||
+            method === 'DELETE' ||
+            method === 'PATCH'
+          "
+          class="row3"
+        >
+          <div class="raw-request-body-title">
+            {{ $t('app.home.rawRequestBody') }}
+          </div>
+          <div class="raw-request-body-code-editer">
+            <code-editor v-model="rawRequestBody" type="js" />
           </div>
         </div>
       </div>
@@ -130,7 +172,7 @@
         >
           {{ statusCode || '(' + $t('app.home.waiting') + ')' }}
         </div>
-        <div class="tabs">
+        <div v-if="response" class="tabs">
           <div
             v-for="item in responseUiTabs"
             :key="item.title"
@@ -140,7 +182,7 @@
             {{ $t('app.home.' + item.title) }}
           </div>
         </div>
-        <div class="result">
+        <div v-show="response" class="result">
           <div class="result__header">
             <div class="result__header__title">
               {{ $t('app.home.response') }}
@@ -152,7 +194,7 @@
             </div>
           </div>
           <div class="result__view">
-            <code-editor readonly :value="response" />
+            <code-editor ref="ace" v-model="response" readonly />
           </div>
         </div>
       </div>
@@ -168,6 +210,8 @@ export default {
     return {
       method: 'GET',
       url: '',
+      contentType: 'application/json',
+      rawRequestBody: '',
       requestDataTab: 'parameter',
       requestDataTabs: [
         { title: 'parameter', active: true },
@@ -181,11 +225,12 @@ export default {
         // { title: 'headers', active: false },
       ],
       statusCode: null,
-      response: null,
+      response: '',
     }
   },
 
   methods: {
+    // switch request data type, parameter or header
     onClickRequestDataTab(title) {
       this.requestDataTab = title
       this.requestDataTabs.map((item, index) => {
@@ -196,6 +241,7 @@ export default {
         }
       })
     },
+    // add a new parameter
     onClickAddParameter() {
       this.parameters.push({
         key: undefined,
@@ -203,24 +249,30 @@ export default {
         type: undefined,
       })
     },
+    // delete a parameter
     onClickDeleteParameter(index) {
       this.parameters.splice(index, 1)
     },
+    // delete all parmeters
     onClickDeleteAllParameter() {
       this.parameters = []
     },
+    // add a new header
     onClickAddHeader() {
       this.headers.push({
         key: undefined,
         value: undefined,
       })
     },
+    // delete a header
     onClickDeleteHeader(index) {
       this.headers.splice(index, 1)
     },
+    // delete all headers
     onClickDeleteAllHeader() {
       this.headers = []
     },
+    // switch a response ui display type
     onClickResponseUiTab(title) {
       this.responseUiTab = title
       this.responseUiTabs.map((item, index) => {
@@ -231,13 +283,32 @@ export default {
         }
       })
     },
+    // send http request and display the response result
     onClickSend() {
-      httpRequest(this.method, this.url, this.parameters, this.headers).then(
-        (res) => {
-          this.statusCode = res.status
-          this.response = res.data
-        }
-      )
+      const method = this.method
+      const url = this.url
+      const parameters = this.parameters
+      const headers = this.headers
+      const contentType = this.contentType
+      const rawRequestBody = this.rawRequestBody
+        ? JSON.parse(this.rawRequestBody)
+        : {}
+      httpRequest(
+        method,
+        url,
+        parameters,
+        headers,
+        contentType,
+        rawRequestBody
+      ).then((res) => {
+        const contentType = res.headers['content-type']
+        const isApplicationJson = contentType.includes('application/json')
+        this.statusCode = res.status
+        this.response = isApplicationJson
+          ? JSON.stringify(res.data, null, 2)
+          : res.data
+        this.$refs.ace.setMode(isApplicationJson ? 'js' : 'html')
+      })
     },
   },
 }
@@ -250,46 +321,69 @@ export default {
   .request {
     font-size: 16px;
     position: relative;
-    .panel {
-      background-color: $theme-color-05;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      padding: 25px 13px;
-    }
     .title {
       margin-left: 13px;
       color: #2c40d8;
       font-size: 14px;
       font-weight: 900;
     }
-    .label {
-      color: $theme-color-06;
-      margin-bottom: 6px;
-    }
-    .method {
-      flex-grow: 2;
-      select {
-        flex: 1;
+    .panel {
+      background-color: $theme-color-05;
+      border-radius: 10px;
+      padding: 25px 13px;
+      .row1 {
+        display: flex;
+        align-items: center;
+        .label {
+          color: $theme-color-06;
+          margin-bottom: 6px;
+        }
+        .method {
+          flex-grow: 2;
+          select {
+            flex: 1;
+          }
+        }
+        .url {
+          margin-left: 10px;
+          flex-grow: 14;
+          input {
+            flex: 1;
+          }
+          .send {
+            margin-left: 10px;
+            width: 100px;
+            background-color: $theme-color-01;
+            height: 35px;
+            line-height: 35px;
+            border-radius: 7px;
+            font-weight: 900;
+            i {
+              margin-left: 4px;
+              font-size: 20px;
+            }
+          }
+        }
       }
-    }
-    .url {
-      margin-left: 10px;
-      flex-grow: 14;
-      input {
-        flex: 1;
+      .row2 {
+        margin-top: 10px;
+        .content-type-title {
+          color: #ededed;
+          margin-bottom: 6px;
+        }
+        .content-type-input {
+          display: flex;
+          align-items: center;
+          input {
+            flex: 1;
+          }
+        }
       }
-      .send {
-        margin-left: 10px;
-        width: 100px;
-        background-color: $theme-color-01;
-        height: 35px;
-        line-height: 35px;
-        border-radius: 7px;
-        font-weight: 900;
-        i {
-          margin-left: 4px;
-          font-size: 20px;
+      .row3 {
+        margin-top: 10px;
+        .raw-request-body-title {
+          color: #ededed;
+          margin-bottom: 6px;
         }
       }
     }

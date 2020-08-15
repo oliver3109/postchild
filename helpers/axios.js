@@ -12,28 +12,50 @@ axios.interceptors.response.use(
   }
 )
 
-// get request
-export const httpGet = async (url, params, headers) => {
-  return await axios.get(url, {
-    params,
-    headers,
-  })
-}
-
-export const httpRequest = async (method, url, params, headers) => {
-  if (method.toLocaleLowerCase() === 'get') {
-    const result = await httpGet(
-      url,
-      buildParameter(params),
-      buildHeader(headers)
-    )
-    return {
-      status: result.status,
-      data:
-        result.status === 200
-          ? JSON.stringify(result.data, null, 2)
-          : result.data,
-      headers: result.headers,
-    }
+/**
+ * main entry request
+ * @param {*} method
+ * @param {*} url
+ * @param {*} params
+ * @param {*} headers
+ * @param {*} contentType
+ * @param {*} rawRequestBody
+ */
+export const httpRequest = async (
+  method,
+  url,
+  params,
+  headers,
+  contentType,
+  rawRequestBody
+) => {
+  const _method = method.toLocaleLowerCase()
+  if (['get', 'head', 'options'].includes(_method)) {
+    return await axios[_method](url, {
+      params: buildParameter(params),
+      headers: buildHeader(headers),
+    })
+  }
+  // if (['connect', 'trace'].includes(_method)) {
+  //   return await axios[_method](url, {
+  //     params: buildParameter(params),
+  //     headers: buildHeader(headers),
+  //   })
+  // }
+  if (['put', 'post', 'patch'].includes(_method)) {
+    const _headers = buildHeader(headers)
+    _headers['content-type'] = contentType
+    return await axios[_method](url, rawRequestBody, {
+      params: buildParameter(params),
+      headers: _headers,
+    })
+  }
+  if (_method === 'delete') {
+    const _headers = buildHeader(headers)
+    _headers['content-type'] = contentType
+    return await axios.delete(url, {
+      params: buildParameter(params),
+      headers: _headers,
+    })
   }
 }
