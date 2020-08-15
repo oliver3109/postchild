@@ -34,7 +34,7 @@
           <nuxt />
         </div>
         <footer class="app__contanier__right__footer">
-          <div>v0.0.2</div>
+          <div>v0.0.3</div>
           <div style="margin-left: 30px;">Powered by Oliver</div>
         </footer>
       </div>
@@ -178,6 +178,16 @@ button {
   &:hover,
   &:focus {
     border: 2px solid #fff;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .app {
+    &__contanier {
+      &__left {
+        display: none;
+      }
+    }
   }
 }
 </style>

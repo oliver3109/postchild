@@ -16,3 +16,8 @@ demo: [postchild.io](postchild.io)
 #### 2020.8.15 v0.0.2
 
 1. 增加发起 HEAD、POST、PUT、DELETE、OPTIONS、PATCH 网络请求的功能
+
+#### 2020.8.15 v0.0.3
+
+1. 优化 UI 交互体验
+2. 支持移动端响应式适配

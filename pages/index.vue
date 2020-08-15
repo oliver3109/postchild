@@ -254,7 +254,6 @@ export default {
       response: '',
     }
   },
-
   methods: {
     // switch request data type, parameter or header
     onClickRequestDataTab(title) {
@@ -603,6 +602,71 @@ export default {
             &:hover {
               color: $theme-color-01;
             }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .home {
+    .request {
+      .panel {
+        .row1 {
+          flex-wrap: wrap;
+          .method {
+            flex-shrink: 1;
+            width: 100%;
+          }
+          .url {
+            margin-top: 10px;
+            margin-left: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .home {
+    .request {
+      .panel {
+        .row1 {
+          flex-wrap: wrap;
+          .method {
+            flex-shrink: 1;
+            width: 100%;
+          }
+          .url {
+            margin-top: 10px;
+            margin-left: 0;
+            .flex {
+              flex-wrap: wrap;
+              .send {
+                margin-left: 0;
+                margin-top: 15px;
+                flex-shrink: 1;
+                width: 100%;
+              }
+            }
+          }
+        }
+      }
+    }
+    .parameters {
+      &__list {
+        &__item {
+          flex-wrap: wrap;
+          .value {
+            margin-left: 0;
+            margin-top: 10px;
+            flex-shrink: 1;
+            width: 100%;
+          }
+          i {
+            margin: 0 auto;
           }
         }
       }
