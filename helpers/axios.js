@@ -8,7 +8,10 @@ axios.interceptors.response.use(
     return response
   },
   function (error) {
-    return Promise.resolve(error.response)
+    if (error && error.response) {
+      return Promise.resolve(error.response)
+    }
+    return Promise.reject(error)
   }
 )
 

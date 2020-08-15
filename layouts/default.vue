@@ -2,7 +2,10 @@
   <div class="app">
     <div class="app__contanier">
       <div class="app__contanier__left">
-        <div class="app__contanier__left__item">
+        <div
+          v-tooltip.right="$t('app.navigation.home')"
+          class="app__contanier__left__item"
+        >
           {{ $t('app.navigation.home') }}
         </div>
         <!-- <div class="app__contanier__left__item">
@@ -15,6 +18,7 @@
           <div class="app__contanier__right__header__tool">
             <div class="app__contanier__right__header__tool__item">
               <DropDownMenu
+                v-tooltip.bottom="$t('app.navigation.chooseLanguage')"
                 :options="[
                   { value: 'zhHans', label: '简体中文' },
                   { value: 'en', label: 'English' },

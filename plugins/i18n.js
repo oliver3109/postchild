@@ -11,6 +11,7 @@ const messages = {
       navigation: {
         home: 'Home',
         reaitime: 'Reaitime',
+        chooseLanguage: 'Choose Language',
       },
       home: {
         request: 'Request',
@@ -29,6 +30,9 @@ const messages = {
         waiting: 'waiting to send request',
         json: 'JSON',
         headers: 'Headers',
+        clear: 'Clear',
+        delete: 'Delete',
+        copyResponse: 'Copy Response',
       },
     },
   },
@@ -37,6 +41,7 @@ const messages = {
       navigation: {
         home: '首页',
         reaitime: '长链接',
+        chooseLanguage: '选择语言',
       },
       home: {
         request: '请求',
@@ -55,6 +60,9 @@ const messages = {
         waiting: '正在等待发送请求',
         json: 'JSON',
         headers: 'Headers',
+        clear: '清空',
+        delete: '删除',
+        copyResponse: '复制结果',
       },
     },
   },

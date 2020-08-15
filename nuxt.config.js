@@ -32,12 +32,16 @@ export default {
   /*
    ** Global CSS
    */
-  css: ['~/static/font/font.css'],
+  css: ['~/static/font/font.css', '~/assets/v-tooltip.scss'],
   /*
    ** Plugins to load before mounting the App
    ** https://nuxtjs.org/guide/plugins
    */
-  plugins: ['~/plugins/i18n.js'],
+  plugins: [
+    '~/plugins/i18n.js',
+    '~/plugins/v-tooltip.js',
+    '~/plugins/v-clipboard.js',
+  ],
   /*
    ** Auto import components
    ** See https://nuxtjs.org/api/configuration-components
@@ -57,6 +61,7 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
+    '@nuxtjs/toast',
   ],
   /*
    ** Axios module configuration
@@ -78,6 +83,15 @@ export default {
         },
       })
     },
+  },
+
+  toast: {
+    position: 'bottom-center',
+  },
+
+  loading: {
+    color: '#ebff33',
+    height: '3px',
   },
 
   generate: {

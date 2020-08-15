@@ -93,7 +93,11 @@
             <div class="parameters__list__header__title">
               {{ $t('app.home.parameterList') }}
             </div>
-            <i class="material-icons" @click="onClickDeleteAllParameter">
+            <i
+              v-tooltip.bottom="$t('app.home.clear')"
+              class="material-icons"
+              @click="onClickDeleteAllParameter"
+            >
               clear_all
             </i>
           </div>
@@ -104,11 +108,11 @@
           >
             <input class="key" :placeholder="'parameter ' + (index + 1)" />
             <input class="value" :placeholder="'value ' + (index + 1)" />
-            <select class="type">
-              <option value="Query">Query</option>
-              <option value="Path">Path</option>
-            </select>
-            <i class="material-icons" @click="onClickDeleteParameter(index)">
+            <i
+              v-tooltip.bottom="$t('app.home.delete')"
+              class="material-icons"
+              @click="onClickDeleteParameter(index)"
+            >
               delete
             </i>
           </div>
@@ -128,7 +132,11 @@
             <div class="parameters__list__header__title">
               {{ $t('app.home.headerList') }}
             </div>
-            <i class="material-icons" @click="onClickDeleteAllHeader">
+            <i
+              v-tooltip.bottom="$t('app.home.clear')"
+              class="material-icons"
+              @click="onClickDeleteAllHeader"
+            >
               clear_all
             </i>
           </div>
@@ -147,7 +155,11 @@
               class="value"
               :placeholder="'value ' + (index + 1)"
             />
-            <i class="material-icons" @click="onClickDeleteHeader(index)">
+            <i
+              v-tooltip.bottom="$t('app.home.delete')"
+              class="material-icons"
+              @click="onClickDeleteHeader(index)"
+            >
               delete
             </i>
           </div>
@@ -188,7 +200,21 @@
               {{ $t('app.home.response') }}
             </div>
             <div class="result__header__tool">
-              <i class="material-icons">
+              <i
+                v-tooltip.top="$t('app.home.copyResponse')"
+                v-clipboard="{
+                  v: response,
+                  duration: 1000,
+                  ok: () => {
+                    this.$toast.success(`copied to clipboard`, {
+                      duration: 3000,
+                      icon: 'done',
+                      theme: 'bubble',
+                    })
+                  },
+                }"
+                class="material-icons"
+              >
                 content_copy
               </i>
             </div>
@@ -251,10 +277,20 @@ export default {
     },
     // delete a parameter
     onClickDeleteParameter(index) {
+      this.$toast.error(`Deleted Done`, {
+        duration: 3000,
+        icon: 'delete',
+        theme: 'bubble',
+      })
       this.parameters.splice(index, 1)
     },
     // delete all parmeters
     onClickDeleteAllParameter() {
+      this.$toast.success(`Cleared`, {
+        duration: 3000,
+        icon: 'clear_all',
+        theme: 'bubble',
+      })
       this.parameters = []
     },
     // add a new header
@@ -266,10 +302,20 @@ export default {
     },
     // delete a header
     onClickDeleteHeader(index) {
+      this.$toast.error(`Deleted Done`, {
+        duration: 3000,
+        icon: 'delete',
+        theme: 'bubble',
+      })
       this.headers.splice(index, 1)
     },
     // delete all headers
     onClickDeleteAllHeader() {
+      this.$toast.success(`Cleared`, {
+        duration: 3000,
+        icon: 'clear_all',
+        theme: 'bubble',
+      })
       this.headers = []
     },
     // switch a response ui display type
@@ -285,6 +331,8 @@ export default {
     },
     // send http request and display the response result
     onClickSend() {
+      const startTime = new Date().getTime()
+      this.$nuxt.$loading.start()
       const method = this.method
       const url = this.url
       const parameters = this.parameters
@@ -293,22 +341,35 @@ export default {
       const rawRequestBody = this.rawRequestBody
         ? JSON.parse(this.rawRequestBody)
         : {}
-      httpRequest(
-        method,
-        url,
-        parameters,
-        headers,
-        contentType,
-        rawRequestBody
-      ).then((res) => {
-        const contentType = res.headers['content-type']
-        const isApplicationJson = contentType.includes('application/json')
-        this.statusCode = res.status
-        this.response = isApplicationJson
-          ? JSON.stringify(res.data, null, 2)
-          : res.data
-        this.$refs.ace.setMode(isApplicationJson ? 'js' : 'html')
-      })
+      httpRequest(method, url, parameters, headers, contentType, rawRequestBody)
+        .then((res) => {
+          if (res) {
+            const contentType = res.headers['content-type']
+            const isApplicationJson = contentType.includes('application/json')
+            this.statusCode = res.status
+            this.response = isApplicationJson
+              ? JSON.stringify(res.data, null, 2)
+              : res.data
+            this.$refs.ace.setMode(isApplicationJson ? 'js' : 'html')
+            const endTime = new Date().getTime()
+            this.$nuxt.$loading.finish()
+            if (res.status === 200) {
+              this.$toast.success(`Successfully in ${endTime - startTime}ms`, {
+                duration: 3000,
+                icon: 'done',
+                theme: 'bubble',
+              })
+            }
+          }
+        })
+        .catch((error) => {
+          this.$nuxt.$loading.finish()
+          this.$toast.error(`${error} (F12 for Detail)`, {
+            duration: 3000,
+            icon: 'done',
+            theme: 'bubble',
+          })
+        })
     },
   },
 }
@@ -464,14 +525,10 @@ export default {
           flex-grow: 6;
           margin-left: 10px;
         }
-        .type {
-          margin-left: 10px;
-          flex-grow: 4;
-        }
         i {
           margin-left: 15px;
           margin-right: 5px;
-          font-size: 32px;
+          font-size: 30px;
           cursor: pointer;
           &:hover {
             color: $theme-color-01;
