@@ -135,6 +135,8 @@ export default {
 .drop-down-menu {
   cursor: pointer;
   display: flex;
+  justify-content: center;
+  width: 100%;
   z-index: 10;
   &__options {
     max-height: 256px;

@@ -26,7 +26,8 @@
             <div class="flex">
               <input v-model="url" type="text" />
               <button class="send" @click="onClickSend">
-                {{ $t('app.home.send') }}<i class="material-icons">send</i>
+                {{ isFetching ? 'Fetching...' : $t('app.home.send')
+                }}<i v-if="!isFetching" class="material-icons">send</i>
               </button>
             </div>
           </div>
@@ -176,6 +177,7 @@
       <div class="panel">
         <div class="status">{{ $t('app.home.statusCode') }}</div>
         <div
+          v-if="!isFetching"
           class="status-value"
           :class="{
             'status-value--ok': statusCode && statusCode == 200,
@@ -183,6 +185,9 @@
           }"
         >
           {{ statusCode || '(' + $t('app.home.waiting') + ')' }}
+        </div>
+        <div v-if="isFetching" class="status-value">
+          Fetching ...
         </div>
         <div v-if="response" class="tabs">
           <div
@@ -250,6 +255,7 @@ export default {
         { title: 'json', active: true },
         // { title: 'headers', active: false },
       ],
+      isFetching: false,
       statusCode: null,
       response: '',
     }
@@ -332,6 +338,7 @@ export default {
     onClickSend() {
       const startTime = new Date().getTime()
       this.$nuxt.$loading.start()
+      this.isFetching = true
       const method = this.method
       const url = this.url
       const parameters = this.parameters
@@ -352,6 +359,7 @@ export default {
             this.$refs.ace.setMode(isApplicationJson ? 'js' : 'html')
             const endTime = new Date().getTime()
             this.$nuxt.$loading.finish()
+            this.isFetching = false
             if (res.status === 200) {
               this.$toast.success(`Successfully in ${endTime - startTime}ms`, {
                 duration: 3000,
@@ -494,6 +502,9 @@ export default {
       align-items: center;
       cursor: pointer;
       font-size: 18px;
+      &:hover {
+        color: $theme-color-01;
+      }
     }
     &__list {
       &__header {
