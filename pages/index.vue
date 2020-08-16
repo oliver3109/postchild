@@ -457,6 +457,7 @@ export default {
         })
         .catch((error) => {
           this.$nuxt.$loading.finish()
+          this.isFetching = false
           this.$toast.error(`${error} (F12 for Detail)`, {
             duration: 3000,
             icon: 'done',

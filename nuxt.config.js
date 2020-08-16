@@ -100,6 +100,7 @@ export default {
   loading: {
     color: '#ebff33',
     height: '3px',
+    continuous: true,
   },
 
   generate: {
