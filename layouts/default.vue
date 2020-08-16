@@ -61,7 +61,7 @@
           <nuxt />
         </div>
         <footer class="app__contanier__right__footer">
-          <div>v0.0.3</div>
+          <div>v0.0.4</div>
           <div style="margin-left: 30px;">Powered by Oliver</div>
         </footer>
       </div>

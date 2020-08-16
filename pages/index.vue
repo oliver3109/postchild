@@ -70,7 +70,7 @@
               {{ $t('app.home.rawRequestBody') }}
             </div>
             <div class="raw-request-body-code-editer">
-              <code-editor v-model="rawRequestBody" type="js" />
+              <code-editor v-model="rawRequestBody" type="javascript" />
             </div>
           </div>
         </div>
@@ -437,7 +437,7 @@ export default {
             this.response = isApplicationJson
               ? JSON.stringify(res.data, null, 2)
               : res.data
-            this.$refs.ace.setMode(isApplicationJson ? 'js' : 'html')
+            this.$refs.ace.setMode(isApplicationJson ? 'javascript' : 'html')
             const endTime = new Date().getTime()
             this.$nuxt.$loading.finish()
             this.isFetching = false

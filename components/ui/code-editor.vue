@@ -17,30 +17,36 @@ import 'ace-builds/webpack-resolver'
 import 'ace-builds/src-noconflict/ext-language_tools'
 import 'ace-builds/src-noconflict/theme-twilight'
 import 'ace-builds/src-noconflict/mode-javascript'
+import 'ace-builds/src-noconflict/mode-html'
 
 export default {
   name: 'CodeEditor',
   props: {
     value: { type: String, default: '' },
     readonly: { type: Boolean, default: false },
-    mode: { type: String, default: 'js' },
+    mode: { type: String, default: 'javascript' },
   },
   data() {
     return {
       aceEditor: null,
       themePath: 'ace/theme/twilight',
       modePath: 'ace/mode/javascript',
+      cacheValue: '',
     }
   },
   watch: {
     value(v) {
-      this.aceEditor.getSession().setValue(v)
+      if (this.cacheValue !== v) {
+        this.aceEditor.getSession().setValue(v)
+        this.cacheValue = v
+      }
     },
     mode(v) {
       this.setMode(v)
     },
   },
   mounted() {
+    this.cacheValue = this.$props.value
     this.aceEditor = ace.edit(this.$refs.ace, {
       maxLines: 20,
       minLines: 10,
@@ -59,20 +65,15 @@ export default {
       enableLiveAutocompletion: true,
       enableBasicAutocompletion: true,
     })
-    this.aceEditor.getSession().on('change', this.change)
+    this.aceEditor.getSession().on('change', () => {
+      const content = this.aceEditor.getSession().getValue()
+      this.cacheValue = content
+      this.$emit('input', content)
+    })
   },
   methods: {
-    change() {
-      this.$emit('input', this.aceEditor.getSession().getValue())
-    },
     setMode(type) {
-      let mode = ''
-      if (type === 'js') {
-        mode = 'ace/mode/javascript'
-      }
-      if (type === 'html') {
-        mode = 'ace/mode/html'
-      }
+      const mode = `ace/mode/${type}`
       this.aceEditor.getSession().setMode(mode)
     },
   },
