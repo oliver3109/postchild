@@ -33,9 +33,11 @@ export const httpRequest = async (
   rawRequestBody
 ) => {
   const _method = method.toLocaleLowerCase()
+  const { path } = buildParameter(params)
+
   if (['get', 'head', 'options'].includes(_method)) {
-    return await axios[_method](url, {
-      params: buildParameter(params),
+    return await axios[_method](url + path, {
+      // params: param,
       headers: buildHeader(headers),
     })
   }
@@ -45,19 +47,21 @@ export const httpRequest = async (
   //     headers: buildHeader(headers),
   //   })
   // }
+
   if (['put', 'post', 'patch'].includes(_method)) {
     const _headers = buildHeader(headers)
     _headers['content-type'] = contentType
-    return await axios[_method](url, rawRequestBody, {
-      params: buildParameter(params),
+    return await axios[_method](url + path, rawRequestBody, {
+      // params: param,
       headers: _headers,
     })
   }
+
   if (_method === 'delete') {
     const _headers = buildHeader(headers)
     _headers['content-type'] = contentType
-    return await axios.delete(url, {
-      params: buildParameter(params),
+    return await axios.delete(url + path, {
+      // params: param,
       headers: _headers,
     })
   }
