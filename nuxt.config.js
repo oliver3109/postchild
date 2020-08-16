@@ -15,16 +15,20 @@ export default {
    */
   head: {
     titleTemplate: '%s',
-    title: 'Postchild',
+    title: 'Postchild • A free,simaple API request builder',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { name: 'keywords', content: 'Postchild' },
+      {
+        name: 'keywords',
+        content:
+          'postchild, postchild chrome, postchild online, postchild for mac, postchild app, postchild for windows, postchild google chrome, postchild chrome app, get postchild, postchild web, postchild android, postchild app for chrome, postchild mobile app, postchild web app, api, request, testing, tool, rest',
+      },
       {
         hid: 'description',
         name: 'description',
         content:
-          'Children of postman and postwoman, just kidding. Mainly learn and imitate postman and postwoman.',
+          'Children of postman and postwoman, just a kidding. Mainly learn and imitate postman and postwoman.',
       },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
@@ -41,6 +45,7 @@ export default {
     '~/plugins/i18n.js',
     '~/plugins/v-tooltip.js',
     '~/plugins/v-clipboard.js',
+    { src: '~/plugins/ga.js', mode: 'client' },
   ],
   /*
    ** Auto import components
@@ -62,6 +67,9 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     '@nuxtjs/toast',
+    '@nuxtjs/robots',
+    '@nuxtjs/sitemap',
+    '@nuxtjs/google-analytics',
   ],
   /*
    ** Axios module configuration
@@ -97,5 +105,20 @@ export default {
   generate: {
     dir: 'dist',
     subFolders: false,
+  },
+
+  googleAnalytics: {
+    id: 'UA-170910994-2',
+  },
+
+  sitemap: {
+    hostname: 'http://postchild.io',
+  },
+
+  robots: {
+    UserAgent: '*',
+    Disallow: '',
+    Allow: '/',
+    Sitemap: 'http://postchild.io/sitemap.xml',
   },
 }
