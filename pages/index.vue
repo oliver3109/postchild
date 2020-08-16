@@ -263,7 +263,7 @@
         <div class="title">{{ $t('app.home.history') }}</div>
         <div class="panel">
           <span v-if="historyList.length == 0" class="no-data">
-            <i class="material-icons">schedule</i>暂无记录
+            <i class="material-icons">schedule</i>{{ $t('app.home.noHistory') }}
           </span>
           <div v-else class="list">
             <div v-for="(item, index) in historyList" :key="index" class="item">
