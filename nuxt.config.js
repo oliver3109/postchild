@@ -81,6 +81,7 @@ export default {
    ** See https://nuxtjs.org/api/configuration-build/
    */
   build: {
+    publicPath: 'https://cdn.jsdelivr.net/gh/OLIVERgZzy/postchild@gh-pages',
     vendor: ['vue-i18n'],
     extend(config, { isDev, isClient }) {
       config.module.rules.push({
