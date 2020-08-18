@@ -15,20 +15,19 @@ export default {
    */
   head: {
     titleTemplate: '%s',
-    title: 'Postchild • A free,simaple API request builder',
+    title: 'Postchild • 一个免费好看的API请求构建工具',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
         name: 'keywords',
         content:
-          'postchild, postchild chrome, postchild online, postchild for mac, postchild app, postchild for windows, postchild google chrome, postchild chrome app, get postchild, postchild web, postchild android, postchild app for chrome, postchild mobile app, postchild web app, api, request, testing, tool, rest',
+          'postchild, postman, api, request, tool, 接口测试工具, API测试, 类似postman, postman代替',
       },
       {
         hid: 'description',
         name: 'description',
-        content:
-          'Children of postman and postwoman, just a kidding. Mainly learn and imitate postman and postwoman.',
+        content: 'Postchild • 一个免费好看的API请求构建工具',
       },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
