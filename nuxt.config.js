@@ -36,7 +36,7 @@ export default {
   /*
    ** Global CSS
    */
-  css: ['~/static/font/font.css', '~/assets/v-tooltip.scss'],
+  css: ['~/assets/font/font.scss', '~/assets/v-tooltip.scss'],
   /*
    ** Plugins to load before mounting the App
    ** https://nuxtjs.org/guide/plugins
