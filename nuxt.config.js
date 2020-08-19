@@ -33,6 +33,7 @@ export default {
         name: 'X-UA-Compatible',
         content: 'IE=edge, chrome=1',
       },
+      { name: 'baidu-site-verification', content: 'yHZaLQtn7p' },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
