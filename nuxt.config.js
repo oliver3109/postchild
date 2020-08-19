@@ -29,6 +29,10 @@ export default {
         name: 'description',
         content: 'Postchild • 一个免费好看的API请求构建工具',
       },
+      {
+        name: 'X-UA-Compatible',
+        content: 'IE=edge, chrome=1',
+      },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
@@ -69,6 +73,7 @@ export default {
     '@nuxtjs/robots',
     '@nuxtjs/sitemap',
     '@nuxtjs/google-analytics',
+    '@nuxtjs/gtm',
   ],
   /*
    ** Axios module configuration
@@ -110,6 +115,10 @@ export default {
 
   googleAnalytics: {
     id: 'UA-170910994-2',
+  },
+
+  gtm: {
+    id: 'GTM-P7ZTKBC',
   },
 
   sitemap: {
