@@ -1,8 +1,8 @@
 # postchild
 
-Children of postman and postwoman, just kidding. Mainly learn and imitate postman and postwoman.
+模仿 Postman，搭建了一个免费好看的 API 请求构建工具，帮助您更高效的开发和测试。
 
-demo: [postchild.io](postchild.io)
+访问地址: [postchild.io](postchild.io)
 
 ## Timeline
 
