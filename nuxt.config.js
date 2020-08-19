@@ -22,12 +22,13 @@ export default {
       {
         name: 'keywords',
         content:
-          'postchild, postman, api, request, tool, 接口测试工具, API测试, 类似postman, postman代替',
+          'postchild, postman, api, request, tool, test tool, api test tool, similar postman, postman instead, 接口测试工具, API测试, 类似postman, postman代替, 好用的接口测试工具',
       },
       {
         hid: 'description',
         name: 'description',
-        content: 'Postchild • 一个免费好看的API请求构建工具',
+        content:
+          '模仿 Postman，搭建了一个免费好看的 API 请求构建工具，帮助您更高效的开发和测试。Imitated Postman and built a free and beautiful API request building tool to help you develop and test more efficiently.',
       },
       {
         name: 'X-UA-Compatible',
