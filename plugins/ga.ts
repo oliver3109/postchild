@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-sequences */
 /* eslint-disable no-unused-expressions */
+// @ts-nocheck
 
 /**
  * 只在生产模式的客户端中使用
@@ -28,6 +29,7 @@ if (process.client && process.env.NODE_ENV === 'production') {
     'https://www.google-analytics.com/analytics.js',
     'ga'
   )
+
   /**
    * 当前页的访问统计
    */

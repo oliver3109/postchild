@@ -25,7 +25,7 @@
                 target="_blank"
                 aria-label="GitHub"
                 rel="noopener"
-                style="width: 100%; text-align: center;"
+                style="width: 100%; text-align: center"
               >
                 <svg
                   data-v-9ec0375c=""
@@ -62,7 +62,7 @@
         </div>
         <footer class="app__contanier__right__footer">
           <div>v0.0.4</div>
-          <div style="margin-left: 30px;">Powered by Oliver</div>
+          <div style="margin-left: 30px">Powered by Oliver</div>
         </footer>
       </div>
     </div>

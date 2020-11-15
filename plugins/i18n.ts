@@ -74,9 +74,9 @@ const messages = {
   },
 }
 
-let i18n = null
+let i18n: any = null
 
-export default ({ app, store }) => {
+export default ({ app, store }: any) => {
   // Set i18n instance on app
   // This way we can use it in middleware and pages asyncData/fetch
   i18n = new VueI18n({
@@ -86,7 +86,7 @@ export default ({ app, store }) => {
   })
 }
 
-Vue.prototype.$t = (key, ...params) => i18n.t(key, params)
-Vue.prototype.$setLang = (lang) => {
+Vue.prototype.$t = (key: any, ...params: any) => i18n.t(key, params)
+Vue.prototype.$setLang = (lang: any) => {
   i18n.locale = lang
 }

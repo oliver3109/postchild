@@ -4,7 +4,7 @@ import buildHeader from './buildHeader'
 import buildParameter from './buildParameter'
 
 axios.interceptors.response.use(
-  (response) => {
+  (response: any) => {
     return response
   },
   function (error) {
@@ -25,33 +25,27 @@ axios.interceptors.response.use(
  * @param {*} rawRequestBody
  */
 export const httpRequest = async (
-  method,
-  url,
-  params,
-  headers,
-  contentType,
-  rawRequestBody
+  method: string,
+  url: string,
+  params: Array<any>,
+  headers: Array<any>,
+  contentType: string,
+  rawRequestBody: any
 ) => {
   const _method = method.toLocaleLowerCase()
   const { path } = buildParameter(params)
 
   if (['get', 'head', 'options'].includes(_method)) {
-    return await axios[_method](url + path, {
+    return await (axios as any)[_method](url + path, {
       // params: param,
       headers: buildHeader(headers),
     })
   }
-  // if (['connect', 'trace'].includes(_method)) {
-  //   return await axios[_method](url, {
-  //     params: buildParameter(params),
-  //     headers: buildHeader(headers),
-  //   })
-  // }
 
   if (['put', 'post', 'patch'].includes(_method)) {
     const _headers = buildHeader(headers)
     _headers['content-type'] = contentType
-    return await axios[_method](url + path, rawRequestBody, {
+    return await (axios as any)[_method](url + path, rawRequestBody, {
       // params: param,
       headers: _headers,
     })

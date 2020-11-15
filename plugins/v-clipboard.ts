@@ -1,10 +1,5 @@
 import Vue from 'vue'
 
-/**
- * example:
- * v-clipboard="{ v: 'copy str', duration: 3000, ok: () => {}, end: () => {} }"
- */
-
 const clipboard = {
   oInnerHtml: '',
   value: {
@@ -12,8 +7,8 @@ const clipboard = {
     duration: 0,
     ok: undefined,
     end: undefined,
-  },
-  action(el) {
+  } as any,
+  action(el: any) {
     const { v, duration = 0, ok, end } = clipboard.value
     const input = document.createElement('input')
     input.setAttribute('value', v)
@@ -26,20 +21,20 @@ const clipboard = {
     if (duration > 0) {
       const _timer = setTimeout(() => {
         el.innerHTML = clipboard.oInnerHtml
-        end()
+        end && end()
         clearTimeout(_timer)
       }, duration)
     }
   },
   // Execute after dom is generated
-  inserted: (el) => {
+  inserted: (el: any) => {
     clipboard.oInnerHtml = el.innerHTML
     el.addEventListener('click', () => {
       clipboard.action(el)
     })
   },
   // Execute after dom is update
-  update: (el, binding) => {
+  update: (el: any, binding: any) => {
     const { value } = binding
     clipboard.value = value
   },
