@@ -2,8 +2,6 @@
 
 [中文介绍](./README_zh.md)
 
-# postchild
-
 # Preface
 
 Presumably everyone has used postman, an interface testing tool, to develop interfaces on weekdays, and should be familiar to him. Recently, I stumbled upon a web version of the interface testing tool, which is free and open source. Yes, it is [postwoman](https://postwoman.io/), a refreshing and handsome UI interface, powerful functions, and not inferior to postman, which makes me praise it.

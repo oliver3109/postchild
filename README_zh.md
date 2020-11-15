@@ -1,7 +1,5 @@
 ![postchild](https://socialify.git.ci/OLIVERgZzy/postchild/image?description=1&descriptionEditable=%E6%A8%A1%E4%BB%BF%20Postman%EF%BC%8C%E6%90%AD%E5%BB%BA%E4%BA%86%E4%B8%80%E4%B8%AA%E5%85%8D%E8%B4%B9%E5%A5%BD%E7%9C%8B%E7%9A%84%20API%20%E8%AF%B7%E6%B1%82%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7%EF%BC%8C%E5%B8%AE%E5%8A%A9%E6%82%A8%E6%9B%B4%E9%AB%98%E6%95%88%E7%9A%84%E5%BC%80%E5%8F%91%E5%92%8C%E6%B5%8B%E8%AF%95%E3%80%82&font=Inter&forks=1&issues=1&language=1&owner=1&pattern=Circuit%20Board&pulls=1&stargazers=1&theme=Light)
 
-# Postchild
-
 # 前言
 
 想必大家平日里开发接口，或多或少都用过 postman 这款接口测试工具，应该都对他不陌生。近日偶然发现一款 web 版接口测试工具并且免费开源。对，它就是 [postwoman](https://postwoman.io/)，清爽帅气的 UI 界面，强大的功能，相对 postman 丝毫不逊色，令我啧啧称赞。
