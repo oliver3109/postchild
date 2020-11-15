@@ -24,12 +24,12 @@ Since it is the purpose of learning, in this project I will reduce the use of th
 
 - [x] Basic request GET, HEAD, POST, PUT, DELETE, OPTIONS, PATCH
 - [x] History (implemented by vuex)
-- [] WebSocket
-- [] SocketIO
-- [] GraphQL
-- [] Interface theme color switch
-- [] Authorized login (in order to store history and favorites)
-- [] Favorites function
+- [ ] WebSocket
+- [ ] SocketIO
+- [ ] GraphQL
+- [ ] Interface theme color switch
+- [ ] Authorized login (in order to store history and favorites)
+- [ ] Favorites function
 
 # Experience address
 
