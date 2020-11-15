@@ -1,4 +1,4 @@
-export default {
+const nuxtConfig = {
   /*
    ** Nuxt rendering mode
    ** See https://nuxtjs.org/api/configuration-mode
@@ -47,10 +47,10 @@ export default {
    ** https://nuxtjs.org/guide/plugins
    */
   plugins: [
-    '~/plugins/i18n.js',
-    '~/plugins/v-tooltip.js',
-    '~/plugins/v-clipboard.js',
-    { src: '~/plugins/ga.js', mode: 'client' },
+    '~/plugins/i18n.ts',
+    '~/plugins/v-tooltip.ts',
+    '~/plugins/v-clipboard.ts',
+    { src: '~/plugins/ga.ts', mode: 'client' },
   ],
   /*
    ** Auto import components
@@ -61,21 +61,20 @@ export default {
    ** Nuxt.js dev-modules
    */
   buildModules: [
-    // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module',
+    // https://go.nuxtjs.dev/typescript
+    '@nuxt/typescript-build',
   ],
   /*
    ** Nuxt.js modules
    */
   modules: [
-    // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios',
     '@nuxtjs/pwa',
     '@nuxtjs/toast',
     '@nuxtjs/robots',
     '@nuxtjs/sitemap',
     '@nuxtjs/google-analytics',
     '@nuxtjs/gtm',
+    '@nuxtjs/eslint-module',
   ],
   /*
    ** Axios module configuration
@@ -88,9 +87,9 @@ export default {
    */
   build: {
     publicPath: 'https://cdn.jsdelivr.net/gh/OLIVERgZzy/postchild@gh-pages',
-    vendor: ['vue-i18n'],
-    extend(config, { isDev, isClient }) {
-      config.module.rules.push({
+    // vendor: ['vue-i18n'],
+    extend(config: any) {
+      config.module?.rules.push({
         test: /\.scss$/i,
         loader: 'sass-resources-loader',
         options: {
@@ -98,6 +97,11 @@ export default {
         },
       })
     },
+  },
+
+  typescript: {
+    typeCheck: true,
+    ignoreNotFoundWarnings: true,
   },
 
   toast: {
@@ -134,3 +138,5 @@ export default {
     Sitemap: 'http://postchild.io/sitemap.xml',
   },
 }
+
+export default nuxtConfig

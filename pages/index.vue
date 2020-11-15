@@ -201,9 +201,7 @@
           >
             {{ statusCode || '(' + $t('app.home.waiting') + ')' }}
           </div>
-          <div v-if="isFetching" class="status-value">
-            Fetching ...
-          </div>
+          <div v-if="isFetching" class="status-value">Fetching ...</div>
           <div v-if="response" class="tabs">
             <div
               v-for="item in responseUiTabs"
@@ -296,176 +294,184 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator'
 import { httpRequest } from '../helpers/axios'
 
-export default {
-  data() {
-    return {
-      method: 'GET',
-      url: '',
-      contentType: 'application/json',
-      rawRequestBody: '',
-      requestDataTab: 'parameter',
-      requestDataTabs: [
-        { title: 'parameter', active: true },
-        { title: 'header', active: false },
-      ],
-      parameters: [],
-      headers: [],
-      responseUiTab: 'json',
-      responseUiTabs: [
-        { title: 'json', active: true },
-        // { title: 'headers', active: false },
-      ],
-      isFetching: false,
-      statusCode: null,
-      response: '',
-      toolTab: 'history',
-      toolTabs: [{ title: 'history', active: true }],
-    }
-  },
-  computed: {
-    historyList(v) {
-      return this.$store.state.historys
-    },
-  },
-  methods: {
-    // switch request data type, parameter or header
-    onClickRequestDataTab(title) {
-      this.requestDataTab = title
-      this.requestDataTabs.map((item, index) => {
-        if (item.title === title) {
-          this.$set(this.requestDataTabs[index], 'active', true)
-        } else {
-          this.$set(this.requestDataTabs[index], 'active', false)
-        }
-      })
-    },
-    // add a new parameter
-    onClickAddParameter() {
-      this.parameters.push({
-        key: undefined,
-        value: undefined,
-        type: 'query',
-      })
-    },
-    // delete a parameter
-    onClickDeleteParameter(index) {
-      this.$toast.error(`Deleted Done`, {
-        duration: 3000,
-        icon: 'delete',
-        theme: 'bubble',
-      })
-      this.parameters.splice(index, 1)
-    },
-    // delete all parmeters
-    onClickDeleteAllParameter() {
-      this.$toast.success(`Cleared`, {
-        duration: 3000,
-        icon: 'clear_all',
-        theme: 'bubble',
-      })
-      this.parameters = []
-    },
-    // add a new header
-    onClickAddHeader() {
-      this.headers.push({
-        key: undefined,
-        value: undefined,
-      })
-    },
-    // delete a header
-    onClickDeleteHeader(index) {
-      this.$toast.error(`Deleted Done`, {
-        duration: 3000,
-        icon: 'delete',
-        theme: 'bubble',
-      })
-      this.headers.splice(index, 1)
-    },
-    // delete all headers
-    onClickDeleteAllHeader() {
-      this.$toast.success(`Cleared`, {
-        duration: 3000,
-        icon: 'clear_all',
-        theme: 'bubble',
-      })
-      this.headers = []
-    },
-    // switch a response ui display type
-    onClickResponseUiTab(title) {
-      this.responseUiTab = title
-      this.responseUiTabs.map((item, index) => {
-        if (item.title === title) {
-          this.$set(this.responseUiTabs[index], 'active', true)
-        } else {
-          this.$set(this.responseUiTabs[index], 'active', false)
-        }
-      })
-    },
-    // switch a tool ui display type
-    onClickToolTab(title) {
-      this.toolTab = title
-      this.toolTabs.map((item, index) => {
-        if (item.title === title) {
-          this.$set(this.toolTabs[index], 'active', true)
-        } else {
-          this.$set(this.toolTabs[index], 'active', false)
-        }
-      })
-    },
-    // send http request and display the response result
-    onClickSend() {
-      const startTime = new Date().getTime()
-      this.$nuxt.$loading.start()
-      this.isFetching = true
-      const method = this.method
-      const url = this.url
-      const parameters = this.parameters
-      const headers = this.headers
-      const contentType = this.contentType
-      const rawRequestBody = this.rawRequestBody
-        ? JSON.parse(this.rawRequestBody)
-        : {}
-      httpRequest(method, url, parameters, headers, contentType, rawRequestBody)
-        .then((res) => {
-          if (res) {
-            const contentType = res.headers['content-type']
-            const isApplicationJson = contentType.includes('application/json')
-            this.statusCode = res.status
-            this.response = isApplicationJson
-              ? JSON.stringify(res.data, null, 2)
-              : res.data
-            this.$refs.ace.setMode(isApplicationJson ? 'javascript' : 'html')
-            const endTime = new Date().getTime()
-            this.$nuxt.$loading.finish()
-            this.isFetching = false
-            if (res.status === 200) {
-              this.$toast.success(`Successfully in ${endTime - startTime}ms`, {
-                duration: 3000,
-                icon: 'done',
-                theme: 'bubble',
-              })
-            }
-            this.$store.commit('addHistory', {
-              method,
-              url,
-              status: res.status,
-            })
-          }
-        })
-        .catch((error) => {
+@Component
+export default class Index extends Vue {
+  method = 'GET'
+  url = ''
+  contentType = 'application/json'
+  rawRequestBody = ''
+  requestDataTab = 'parameter'
+  requestDataTabs: Array<any> = [
+    { title: 'parameter', active: true },
+    { title: 'header', active: false },
+  ]
+
+  parameters: Array<any> = []
+  headers: Array<any> = []
+  responseUiTab = 'json'
+  responseUiTabs: Array<any> = [
+    { title: 'json', active: true },
+    // { title: 'headers', active: false },
+  ]
+
+  isFetching = false
+  statusCode = null
+  response = ''
+  toolTab = 'history'
+  toolTabs: Array<any> = [{ title: 'history', active: true }]
+
+  get historyList() {
+    return this.$store.state.historys
+  }
+
+  // switch request data type, parameter or header
+  onClickRequestDataTab(title: string) {
+    this.requestDataTab = title
+    this.requestDataTabs.map((item, index) => {
+      if (item.title === title) {
+        this.$set(this.requestDataTabs[index], 'active', true)
+      } else {
+        this.$set(this.requestDataTabs[index], 'active', false)
+      }
+    })
+  }
+
+  // add a new parameter
+  onClickAddParameter() {
+    this.parameters.push({
+      key: undefined,
+      value: undefined,
+      type: 'query',
+    })
+  }
+
+  // delete a parameter
+  onClickDeleteParameter(index: number) {
+    this.$toast.error(`Deleted Done`, {
+      duration: 3000,
+      icon: 'delete',
+      theme: 'bubble',
+    })
+    this.parameters.splice(index, 1)
+  }
+
+  // delete all parmeters
+  onClickDeleteAllParameter() {
+    this.$toast.success(`Cleared`, {
+      duration: 3000,
+      icon: 'clear_all',
+      theme: 'bubble',
+    })
+    this.parameters = []
+  }
+
+  // add a new header
+  onClickAddHeader() {
+    this.headers.push({
+      key: undefined,
+      value: undefined,
+    })
+  }
+
+  // delete a header
+  onClickDeleteHeader(index: number) {
+    this.$toast.error(`Deleted Done`, {
+      duration: 3000,
+      icon: 'delete',
+      theme: 'bubble',
+    })
+    this.headers.splice(index, 1)
+  }
+
+  // delete all headers
+  onClickDeleteAllHeader() {
+    this.$toast.success(`Cleared`, {
+      duration: 3000,
+      icon: 'clear_all',
+      theme: 'bubble',
+    })
+    this.headers = []
+  }
+
+  // switch a response ui display type
+  onClickResponseUiTab(title: string) {
+    this.responseUiTab = title
+    this.responseUiTabs.map((item, index) => {
+      if (item.title === title) {
+        this.$set(this.responseUiTabs[index], 'active', true)
+      } else {
+        this.$set(this.responseUiTabs[index], 'active', false)
+      }
+    })
+  }
+
+  // switch a tool ui display type
+  onClickToolTab(title: string) {
+    this.toolTab = title
+    this.toolTabs.map((item, index) => {
+      if (item.title === title) {
+        this.$set(this.toolTabs[index], 'active', true)
+      } else {
+        this.$set(this.toolTabs[index], 'active', false)
+      }
+    })
+  }
+
+  // send http request and display the response result
+  onClickSend() {
+    const startTime = new Date().getTime()
+    this.$nuxt.$loading.start()
+    this.isFetching = true
+    const method = this.method
+    const url = this.url
+    const parameters = this.parameters
+    const headers = this.headers
+    const contentType = this.contentType
+    const rawRequestBody = this.rawRequestBody
+      ? JSON.parse(this.rawRequestBody)
+      : {}
+    httpRequest(method, url, parameters, headers, contentType, rawRequestBody)
+      .then(res => {
+        if (res) {
+          const contentType = res.headers['content-type']
+          const isApplicationJson = contentType.includes('application/json')
+          this.statusCode = res.status
+          this.response = isApplicationJson
+            ? JSON.stringify(res.data, null, 2)
+            : res
+                .data(this.$refs.ace as any)
+                .setMode(isApplicationJson ? 'javascript' : 'html')
+          const endTime = new Date().getTime()
           this.$nuxt.$loading.finish()
           this.isFetching = false
-          this.$toast.error(`${error} (F12 for Detail)`, {
-            duration: 3000,
-            icon: 'done',
-            theme: 'bubble',
+          if (res.status === 200) {
+            this.$toast.success(`Successfully in ${endTime - startTime}ms`, {
+              duration: 3000,
+              icon: 'done',
+              theme: 'bubble',
+            })
+          }
+          this.$store.commit('addHistory', {
+            method,
+            url,
+            status: res.status,
           })
+        }
+      })
+      .catch(error => {
+        this.$nuxt.$loading.finish()
+        this.isFetching = false
+        this.$toast.error(`${error} (F12 for Detail)`, {
+          duration: 3000,
+          icon: 'done',
+          theme: 'bubble',
         })
-    },
-  },
+      })
+  }
 }
 </script>
 

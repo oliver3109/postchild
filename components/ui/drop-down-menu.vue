@@ -93,7 +93,7 @@ export default {
       this.$emit('click', { value: item.value })
     },
     onResize(menusDom) {
-      window.onresize = (e) => {
+      window.onresize = e => {
         const innerWidth = e.currentTarget.innerWidth
         if (this.rW - innerWidth > 0) {
           // 向左偏移
@@ -117,7 +117,7 @@ export default {
       }
     },
     init() {
-      document.body.onclick = (e) => {
+      document.body.onclick = e => {
         if (this.show) {
           this.show = false
           const menusDom = this.menusDom
