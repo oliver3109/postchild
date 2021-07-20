@@ -721,6 +721,8 @@ export default class Index extends Vue {
   &__right {
     flex-grow: 1;
     margin-left: 15px;
+    min-width: 450px;
+    max-width: 450px;
     .request-data-tabs {
       margin-right: 20px;
       line-height: 35px;
@@ -816,6 +818,18 @@ export default class Index extends Vue {
   }
 }
 
+@media only screen and (max-width: 1324px) {
+  .home {
+    flex-wrap: wrap;
+    &__right {
+      min-width: unset;
+      width: 100%;
+      margin-left: 20px;
+      margin-top: 20px;
+    }
+  }
+}
+
 @media only screen and (max-width: 768px) {
   .home {
     flex-wrap: wrap;
@@ -835,11 +849,6 @@ export default class Index extends Vue {
           }
         }
       }
-    }
-    &__right {
-      width: 100%;
-      margin-left: 0;
-      margin-top: 20px;
     }
   }
 }
@@ -887,6 +896,9 @@ export default class Index extends Vue {
           }
         }
       }
+    }
+    &__right {
+      min-width: unset;
     }
   }
 }
