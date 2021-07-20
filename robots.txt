@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 Allow: /
-Sitemap: http://postchild.io/sitemap.xml
+Sitemap: https://olivergzzy.github.io/postchild/sitemap.xml
