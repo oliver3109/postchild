@@ -2,11 +2,11 @@
 
 # 前言
 
-想必大家平日里开发接口，或多或少都用过 postman 这款接口测试工具，应该都对他不陌生。近日偶然发现一款 web 版接口测试工具并且免费开源。对，它就是 [postwoman](https://postwoman.io/)，清爽帅气的 UI 界面，强大的功能，相对 postman 丝毫不逊色，令我啧啧称赞。
+想必大家平日里开发接口，或多或少都用过 postman 这款接口测试工具，应该都对他不陌生。近日偶然发现一款 web 版接口测试工具并且免费开源。对，它就是 [hoppscotch](https://github.com/hoppscotch/hoppscotch)，清爽帅气的 UI 界面，强大的功能，相对 postman 丝毫不逊色，令我啧啧称赞。
 
 # 动机
 
-出于学习的目的，我也模仿开发了一个精简版接口测试工具并起名为 [postchild](http://postchild.io)。
+出于学习的目的，我也模仿开发了一个精简版接口测试工具并起名为 [postchild](https://olivergzzy.github.io/postchild/)。
 既然是学习的目的，在此次项目中我会尽可能的减少第三方库的使用，尽量靠自己写代码去实现。在过程，也是一种对知识的查漏补缺，尤其是我对 web 通讯、http 协议这方面的不足。下面将会简单介绍一下运用到的技术栈和对未来打算实现的功能。
 
 # 技术栈
@@ -29,4 +29,4 @@
 
 # 体验地址
 
-最后再发一下体验地址: [http://postchild.io](http://postchild.io)
+最后再发一下体验地址: [https://olivergzzy.github.io/postchild/](https://olivergzzy.github.io/postchild/)
