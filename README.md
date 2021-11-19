@@ -13,8 +13,9 @@
 
 1. Vue
 2. Nuxt
-3. Axios
-4. Travis CI
+3. electron
+4. Axios
+5. Travis CI
 
 # 功能清单
 
