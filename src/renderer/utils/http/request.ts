@@ -1,8 +1,4 @@
-import {
-  AxiosRequestHeaders,
-  AxiosResponse,
-  Method,
-} from "_axios@0.24.0@axios";
+import { AxiosRequestHeaders, AxiosResponse, Method } from "axios";
 import {
   getUrlHost,
   getUrlProtocolHostPath,
