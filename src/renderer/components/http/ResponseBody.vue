@@ -12,6 +12,7 @@
         ...cmOption,
         mode,
       }"
+      :content="content"
     ></CodeMirror>
   </div>
 </template>
@@ -31,6 +32,9 @@ import CodeMirror from "~/components/common/CodeMirror.vue";
 export default class ResponseBody extends Vue {
   @Prop({ default: "application/json" })
   mode!: string;
+
+  @Prop({})
+  content!: string;
 
   cmOption = {
     tabSize: 2,

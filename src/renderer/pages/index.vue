@@ -5,7 +5,7 @@
     <div class="request-line">
       <!-- 请求方法 + 请求地址 -->
       <a-input-group class="left" compact>
-        <a-select v-model="request.method">
+        <a-select size="large" v-model="request.method">
           <a-select-option value="GET">GET</a-select-option>
           <a-select-option value="POST">POST</a-select-option>
           <a-select-option value="PUT">PUT</a-select-option>
@@ -14,10 +14,16 @@
           <a-select-option value="HEAD">HEAD</a-select-option>
           <a-select-option value="CONNECT">CONNECT</a-select-option>
         </a-select>
-        <a-input v-model="request.url" />
+        <a-input size="large" v-model="request.url" />
       </a-input-group>
       <!-- 提交按钮 -->
-      <a-button class="submit" type="primary" :loading="loading">
+      <a-button
+        class="submit"
+        type="primary"
+        size="large"
+        :loading="loading"
+        @click="onSend"
+      >
         发送
       </a-button>
     </div>
@@ -117,7 +123,7 @@
 
       <a-tabs default-active-key="1" @change="onRequestResponseTabChange">
         <a-tab-pane key="1" tab="JSON">
-          <ResponseBody></ResponseBody>
+          <ResponseBody :content="response.body"></ResponseBody>
         </a-tab-pane>
         <a-tab-pane key="2" tab="响应头"> </a-tab-pane>
       </a-tabs>
@@ -126,6 +132,7 @@
 </template>
 
 <script lang="ts">
+import { HttpRequest } from "~/utils/http/request";
 import Vue from "vue";
 import Component from "nuxt-class-component";
 
@@ -145,9 +152,13 @@ export default class RestApi extends Vue {
   // 请求
   request = {
     method: "GET",
-    url: "https://echo.hoppscotch.io",
+    url: "http://suggest.taobao.com/sug?code=utf-8&q=手机&callback=cb",
     contentType: "无",
     queryParams: [{ key: "", value: "" }],
+  };
+
+  response = {
+    body: null,
   };
 
   // 删除所有查询参数事件
@@ -174,6 +185,15 @@ export default class RestApi extends Vue {
   // 请求体-内容类型切换事件
   onContentTypeChange(event) {
     this.$set(this.request, "contentType", event.key);
+  }
+
+  async onSend() {
+    const { method, url } = this.request;
+    const res = await HttpRequest.setMethod(method as any)
+      .setUrl(url)
+      .execute();
+    console.log(res);
+    this.response.body = res;
   }
 
   onInput(event) {

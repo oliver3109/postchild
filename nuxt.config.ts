@@ -62,6 +62,13 @@ const config: NuxtConfig = {
     "~/plugins/ant-design-vue",
     { src: "~/plugins/vue-codemirror", ssr: false },
   ],
+  serverMiddleware: [
+    {
+      path: "/middleware",
+      handler: "~/server-middleware/proxy.ts",
+      prefix: false,
+    },
+  ],
 };
 
 export default config;

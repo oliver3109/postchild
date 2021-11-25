@@ -51,6 +51,7 @@
   "dependencies": {
     "@nuxt/types": "^2.15.8",
     "ant-design-vue": "^1.7.8",
+    "axios": "^0.24.0",
     "express": "^4.16.4",
     "express-useragent": "^1.0.13",
     "get-port": "^5.1.1",

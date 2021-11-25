@@ -3,7 +3,7 @@
     <codemirror
       ref="codemirror"
       class="codemirror"
-      v-model="code"
+      :value="content"
       :options="options"
       @cursorActivity="onCmCursorActivity"
       @ready="onCmReady"
@@ -16,37 +16,20 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "nuxt-class-component";
-import { Prop } from "nuxt-property-decorator";
+import { Prop, Watch } from "nuxt-property-decorator";
 
 @Component
 export default class CodeMirror extends Vue {
   @Prop({ type: Object, required: true })
   options!: Record<string, any>;
 
-  // cmOption = {
-  //   tabSize: 2,
-  //   styleActiveLine: false,
-  //   lineNumbers: true,
-  //   styleSelectedText: false,
-  //   line: true,
-  //   foldGutter: true,
-  //   gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-  //   highlightSelectionMatches: { showToken: /\w/, annotateScrollbar: true },
-  //   mode: "application/json", // "text/javascript",
-  //   // hint.js options
-  //   hintOptions: {
-  //     // 当匹配只有一项的时候是否自动补全
-  //     completeSingle: false,
-  //   },
-  //   //快捷键 可提供三种模式 sublime、emacs、vim
-  //   keyMap: "sublime",
-  //   matchBrackets: true,
-  //   showCursorWhenSelecting: true,
-  //   theme: "monokai",
-  //   // extraKeys: { Ctrl: "autocomplete" },
-  // };
+  @Prop({})
+  content!: any;
 
-  code = "";
+  @Watch("content")
+  onContentChange(v) {
+    this.$emit("change", v);
+  }
 
   onCmCursorActivity(codemirror) {
     console.debug("onCmCursorActivity", codemirror);
@@ -71,7 +54,7 @@ export default class CodeMirror extends Vue {
   prettify() {
     this.$nextTick(() => {
       this.getCodemirror().setValue(
-        JSON.stringify(JSON.parse(this.code), null, 2)
+        JSON.stringify(JSON.parse(this.content), null, 2)
       );
     });
   }
