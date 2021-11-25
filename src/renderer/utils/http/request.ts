@@ -66,7 +66,7 @@ export class HttpRequest {
 
     if (targetHost != location.host) {
       // 走代理
-      axiosConfig.method = "post";
+      axiosConfig.method = "POST";
       axiosConfig.data = {
         method,
         url: getUrlProtocolHostPath(url),
@@ -77,6 +77,11 @@ export class HttpRequest {
       axiosConfig.url = `${getUrlProtocolHost(
         location.href
       )}/postchild/middleware/proxy`;
+
+      axiosConfig.headers = {
+        "Content-Type": "application/json;charset=UTF-8",
+        "Access-Control-Allow-Origin": "*",
+      };
 
       const request: AxiosResponse = await axios(axiosConfig);
       return request;
