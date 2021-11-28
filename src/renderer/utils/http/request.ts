@@ -74,9 +74,7 @@ export class HttpRequest {
         headers,
         params: getUrlParams(url),
       };
-      axiosConfig.url = `${getUrlProtocolHost(
-        location.href
-      )}/postchild/middleware/proxy`;
+      axiosConfig.url = `${getUrlProtocolHost(location.href)}/middleware/proxy`;
 
       axiosConfig.headers = {
         "Content-Type": "application/json;charset=UTF-8",

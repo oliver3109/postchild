@@ -29,6 +29,11 @@ const config: NuxtConfig = {
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   },
 
+  server: {
+    port: 3000,
+    host: "0.0.0.0",
+  },
+
   router: {
     base: "/postchild/",
   },
