@@ -38,7 +38,7 @@ export class HttpRequest {
     return this;
   }
 
-  static setParams(params: any) {
+  static setParams(params: Record<string, string>) {
     this.params = params;
     return this;
   }
@@ -46,21 +46,6 @@ export class HttpRequest {
   static async execute() {
     const { method, url, data, headers, params } = this;
     const axiosConfig: Record<string, any> = {};
-    if (method) {
-      axiosConfig["method"] = method;
-    }
-    if (url) {
-      axiosConfig["url"] = url;
-    }
-    if (data) {
-      axiosConfig["data"] = data;
-    }
-    if (headers) {
-      axiosConfig["headers"] = headers;
-    }
-    if (params) {
-      axiosConfig["params"] = params;
-    }
 
     const targetHost = getUrlHost(url);
 
@@ -72,7 +57,7 @@ export class HttpRequest {
         url: getUrlProtocolHostPath(url),
         data,
         headers,
-        params: getUrlParams(url),
+        params: { ...getUrlParams(url), ...params },
       };
       axiosConfig.url = `${getUrlProtocolHost(location.href)}/middleware/proxy`;
 
@@ -83,9 +68,25 @@ export class HttpRequest {
 
       const request: AxiosResponse = await axios(axiosConfig);
       return request;
+    } else {
+      // 不走代理
+      if (method) {
+        axiosConfig["method"] = method;
+      }
+      if (url) {
+        axiosConfig["url"] = url;
+      }
+      if (data) {
+        axiosConfig["data"] = data;
+      }
+      if (headers) {
+        axiosConfig["headers"] = headers;
+      }
+      if (params) {
+        axiosConfig["params"] = params;
+      }
+      const request: AxiosResponse = await axios(axiosConfig);
+      return request;
     }
-
-    const request: AxiosResponse = await axios(axiosConfig);
-    return request;
   }
 }

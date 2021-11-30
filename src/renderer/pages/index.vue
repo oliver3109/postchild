@@ -31,7 +31,7 @@
     <div class="request-body">
       <a-tabs default-active-key="1" @change="onRequestBodyTabChange">
         <a-tab-pane key="1" tab="参数" force-render>
-          <RequestParams></RequestParams>
+          <RequestParams v-model="request.queryParams"></RequestParams>
         </a-tab-pane>
         <a-tab-pane key="2" tab="请求体" force-render>
           <div class="content-type">
@@ -72,11 +72,14 @@
               </div>
             </div>
 
-            <RequestBody :mode="request.contentType"></RequestBody>
+            <RequestBody
+              :mode="request.contentType"
+              v-model="request.body"
+            ></RequestBody>
           </div>
         </a-tab-pane>
         <a-tab-pane key="3" tab="请求头" force-render>
-          <RequestHeaders></RequestHeaders>
+          <RequestHeaders v-model="request.headers"></RequestHeaders>
         </a-tab-pane>
         <a-tab-pane key="4" tab="授权" force-render>
           <div class="content-type">
@@ -106,24 +109,27 @@
     </div>
     <!-- 请求响应 -->
     <div class="request-response">
-      <div class="status-line">
+      <div class="status-line" v-if="response.status">
         <div class="item">
           <span class="label">状态:</span>
-          <span class="value">200</span>
+          <span class="value">{{ response.status }}</span>
         </div>
         <div class="item">
           <span class="label">时间:</span>
-          <span class="value">323ms</span>
+          <span class="value">{{ response.time }}ms</span>
         </div>
         <div class="item">
           <span class="label">大小:</span>
-          <span class="value">980 B</span>
+          <span class="value">{{ response.size }} B</span>
         </div>
       </div>
 
       <a-tabs default-active-key="1" @change="onRequestResponseTabChange">
         <a-tab-pane key="1" tab="JSON">
-          <ResponseBody :content="response.body"></ResponseBody>
+          <ResponseBody
+            ref="responseBody"
+            :content="response.body"
+          ></ResponseBody>
         </a-tab-pane>
         <a-tab-pane key="2" tab="响应头"> </a-tab-pane>
       </a-tabs>
@@ -154,33 +160,17 @@ export default class RestApi extends Vue {
     method: "GET",
     url: "http://suggest.taobao.com/sug?code=utf-8&q=手机&callback=cb",
     contentType: "无",
+    body: null,
     queryParams: [{ key: "", value: "" }],
+    headers: [{ key: "", value: "" }],
   };
 
   response = {
     body: null,
+    status: null,
+    time: null,
+    size: null,
   };
-
-  // 删除所有查询参数事件
-  onClearAllQueryParams() {
-    const { queryParams } = this.request;
-    queryParams.splice(1, queryParams.length);
-    this.$set(this.request, "queryParams", queryParams);
-  }
-
-  // 删除查询参数事件
-  onRemoveQueryParams(index) {
-    const { queryParams } = this.request;
-    queryParams.splice(index, 1);
-    this.$set(this.request, "queryParams", queryParams);
-  }
-
-  // 新增查询参数
-  onAddQueryParam() {
-    const { queryParams } = this.request;
-    queryParams.push({ key: "", value: "" });
-    this.$set(this.request, "queryParams", queryParams);
-  }
 
   // 请求体-内容类型切换事件
   onContentTypeChange(event) {
@@ -188,12 +178,34 @@ export default class RestApi extends Vue {
   }
 
   async onSend() {
-    const { method, url } = this.request;
-    const res = await HttpRequest.setMethod(method as any)
-      .setUrl(url)
-      .execute();
-    console.log(res);
-    this.response.body = res;
+    const { method, url, queryParams, headers, contentType } = this.request;
+
+    //key Values 数组 转 object
+    const keyValueList2Object = (list) => {
+      const obj = {};
+      for (const item of list) {
+        if (item.key != "" && item.value != "") {
+          obj[item.key] = item.value;
+        }
+      }
+      return Object.keys(obj).length == 0 ? null : obj;
+    };
+
+    const httpRequestObj = HttpRequest.setMethod(method as any);
+    httpRequestObj.setUrl(url);
+    httpRequestObj.setParams(keyValueList2Object(queryParams || []));
+
+    const _headers = keyValueList2Object(headers || []);
+    if (contentType != "无") {
+      _headers["content-type"] = contentType;
+    }
+    httpRequestObj.setHeaders(_headers);
+
+    const res = await httpRequestObj.execute();
+    this.response.body = res.data;
+    this.response.status = res.status;
+    this.response.time = (res as any).time;
+    this.response.size = (res as any).size;
   }
 
   onInput(event) {

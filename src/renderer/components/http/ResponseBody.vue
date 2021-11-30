@@ -8,6 +8,7 @@
       </div>
     </div>
     <CodeMirror
+      ref="CodeMirror"
       :options="{
         ...cmOption,
         mode,
@@ -20,7 +21,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "nuxt-class-component";
-import { Prop } from "nuxt-property-decorator";
+import { Prop, Watch } from "nuxt-property-decorator";
 
 import CodeMirror from "~/components/common/CodeMirror.vue";
 
@@ -33,7 +34,7 @@ export default class ResponseBody extends Vue {
   @Prop({ default: "application/json" })
   mode!: string;
 
-  @Prop({})
+  @Prop({ type: [Object, String] })
   content!: string;
 
   cmOption = {
@@ -45,7 +46,7 @@ export default class ResponseBody extends Vue {
     foldGutter: true,
     gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
     highlightSelectionMatches: { showToken: /\w/, annotateScrollbar: true },
-    mode: "application/json", // "text/javascript",
+    // mode: "application/json", // "text/javascript",
     // hint.js options
     hintOptions: {
       // 当匹配只有一项的时候是否自动补全
@@ -59,8 +60,6 @@ export default class ResponseBody extends Vue {
     // extraKeys: { Ctrl: "autocomplete" },
     readOnly: true, // 只读
   };
-
-  code = "";
 
   onCmCursorActivity(codemirror) {
     console.debug("onCmCursorActivity", codemirror);
@@ -79,21 +78,6 @@ export default class ResponseBody extends Vue {
     setTimeout(() => {
       this.cmOption.styleActiveLine = true;
     }, 1800);
-  }
-
-  getCodemirror(): any {
-    return (this.$refs.jsonEditor as any).codemirror;
-  }
-
-  /**
-   * 美化
-   */
-  prettify() {
-    this.$nextTick(() => {
-      this.getCodemirror().setValue(
-        JSON.stringify(JSON.parse(this.code), null, 2)
-      );
-    });
   }
 }
 </script>

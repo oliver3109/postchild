@@ -7,10 +7,12 @@ const service = axios.create({
 
 service.interceptors.request.use(
   (config) => {
+    config.headers["x-postchild-request-start"] = new Date()
+      .getTime()
+      .toString();
     return config;
   },
   (error) => {
-    console.error(error);
     return Promise.reject(error);
   }
 );
@@ -18,6 +20,8 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   (response) => {
     const res = response.data;
+    const requestTime = response.config.headers["x-postchild-request-start"];
+    res.time = +new Date() - +requestTime;
     return res;
   },
   (error) => {

@@ -9,7 +9,11 @@
       </div>
     </div>
 
-    <KeyValues :list="list" :keyTitle="'参数'"></KeyValues>
+    <KeyValues
+      :list="list"
+      :keyTitle="'参数'"
+      @remove="onRemoveQueryParams"
+    ></KeyValues>
   </div>
 </template>
 
@@ -17,6 +21,7 @@
 import Vue from "vue";
 import Component from "nuxt-class-component";
 import KeyValues from "../common/KeyValues.vue";
+import { Watch } from "vue-property-decorator";
 
 @Component({
   components: { KeyValues },
@@ -24,13 +29,18 @@ import KeyValues from "../common/KeyValues.vue";
 export default class RequestParams extends Vue {
   list = [{ key: "", value: "" }];
 
+  @Watch("list", { deep: true })
+  onListChange(v) {
+    this.$emit("input", v);
+  }
+
   onClearAll() {
     const list = this.list;
     list.splice(1, list.length);
     this.list = list;
   }
 
-  onRemoveQueryParams(index) {
+  onRemoveQueryParams({ index }) {
     const list = this.list;
     list.splice(index, 1);
     this.list = list;

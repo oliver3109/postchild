@@ -3,7 +3,6 @@
     <codemirror
       ref="codemirror"
       class="codemirror"
-      :value="content"
       :options="options"
       @cursorActivity="onCmCursorActivity"
       @ready="onCmReady"
@@ -23,12 +22,15 @@ export default class CodeMirror extends Vue {
   @Prop({ type: Object, required: true })
   options!: Record<string, any>;
 
-  @Prop({})
+  @Prop({ type: [Object, String] })
   content!: any;
 
   @Watch("content")
   onContentChange(v) {
     this.$emit("change", v);
+    if (v) {
+      this.prettify(v);
+    }
   }
 
   onCmCursorActivity(codemirror) {
@@ -45,17 +47,28 @@ export default class CodeMirror extends Vue {
   }
 
   getCodemirror(): any {
-    return (this.$refs.jsonEditor as any).codemirror;
+    return (this.$refs.codemirror as any).codemirror;
   }
 
   /**
    * 美化
    */
-  prettify() {
+  prettify(v) {
     this.$nextTick(() => {
-      this.getCodemirror().setValue(
-        JSON.stringify(JSON.parse(this.content), null, 2)
-      );
+      let value = v;
+      if (typeof v === "string") {
+        try {
+          value = JSON.parse(v);
+          const str = JSON.stringify(value, null, 4);
+          this.getCodemirror().setValue(str);
+        } catch {
+          this.getCodemirror().setValue(v);
+        }
+      }
+      if (typeof v === "object") {
+        const str = JSON.stringify(value, null, 4);
+        this.getCodemirror().setValue(str);
+      }
     });
   }
 }
