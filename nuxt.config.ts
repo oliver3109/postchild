@@ -65,8 +65,8 @@ const config: NuxtConfig = {
 
     "@nuxtjs/dotenv",
   ],
-  publicRuntimeConfig: {
-    nodeEnv: NODE_ENV,
+  env: {
+    NODE_ENV: NODE_ENV,
   },
   plugins: [
     "~/plugins/ant-design-vue",

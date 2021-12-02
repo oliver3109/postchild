@@ -244,7 +244,7 @@ export default class RestApi extends Vue {
       httpRequestObj.setHeaders(_headers);
     }
 
-    const res = await httpRequestObj.execute((c) => {
+    const res = await httpRequestObj.execute(process.env.NODE_ENV, (c) => {
       this.cancelFn = c;
     });
     if (res) {
@@ -263,10 +263,6 @@ export default class RestApi extends Vue {
   async onCancel() {
     this.cancelFn();
     restStore.stop();
-  }
-
-  onInput(event) {
-    console.log(event);
   }
 
   onRequestBodyTabChange(event) {

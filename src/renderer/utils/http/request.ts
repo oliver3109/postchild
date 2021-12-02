@@ -2,7 +2,6 @@ import {
   AxiosRequestConfig,
   AxiosRequestHeaders,
   AxiosResponse,
-  CancelToken,
   Method,
 } from "axios";
 import {
@@ -50,7 +49,7 @@ export class HttpRequest {
     return this;
   }
 
-  static async execute(cancelFn?: (c) => void) {
+  static async execute(env: string, cancelFn?: (c) => void) {
     const { method, url, data, headers, params } = this;
     const axiosConfig: AxiosRequestConfig = {};
 
@@ -60,7 +59,7 @@ export class HttpRequest {
     axiosConfig.cancelToken = new CancelToken(cancelFn);
 
     // 如果当前环境是 GitHub Page 走我自己的服务器
-    if (process.env.NODE_ENV == "github") {
+    if (env === "github") {
       return this.proxy(
         `https://www.manito.fun/middleware/proxy`,
         axiosConfig,
@@ -72,6 +71,7 @@ export class HttpRequest {
       );
     }
 
+    // 其他环境
     if (targetHost != location.host) {
       // 走代理
       return this.proxy(
