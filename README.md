@@ -30,4 +30,4 @@
 
 # 体验地址
 
-最后再发一下体验地址: [hhttps://www.postchild.top](hhttps://www.postchild.top)
+最后再发一下体验地址: [https://www.postchild.top](https://www.postchild.top)
