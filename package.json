@@ -25,11 +25,11 @@
   },
   "scripts": {
     "build:main": "tsc -p tsconfig.main.json",
-    "build:dist": "cross-env DEPLOY_ENV=GH_PAGES && nuxt generate && yarn build:main",
+    "build:dist": "nuxt generate && yarn build:main",
     "build:pack": "electron-builder",
     "build": "yarn build:dist && yarn build:pack",
     "dev": "yarn build:main && concurrently -k -n main,renderer -c blue,green \"cross-env NODE_ENV=development electron .\" \"nuxt dev\"",
-    "nuxt:dist": "cross-env DEPLOY_ENV=GH_PAGES && nuxt generate",
+    "generate:gh-pages": "cross-env DEPLOY_ENV=GH_PAGES nuxt generate",
     "nuxt:dev": "yarn build:main && cross-env NODE_ENV=web nuxt"
   },
   "devDependencies": {
