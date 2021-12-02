@@ -3,15 +3,17 @@
     <div class="tools-bar">
       <div class="left">原始请求体</div>
       <div class="right">
-        <a-button icon="delete"></a-button>
+        <a-button icon="delete" @click="onClear"></a-button>
         <a-button icon="file-add"></a-button>
       </div>
     </div>
     <CodeMirror
+      ref="codeMirror"
       :options="{
         ...cmOption,
         mode,
       }"
+      @change="onChange"
     ></CodeMirror>
   </div>
 </template>
@@ -57,38 +59,18 @@ export default class RequestBody extends Vue {
 
   code = "";
 
-  onCmCursorActivity(codemirror) {
-    console.debug("onCmCursorActivity", codemirror);
-  }
-  onCmReady(codemirror) {
-    console.debug("onCmReady", codemirror);
-  }
-  onCmFocus(codemirror) {
-    console.debug("onCmFocus", codemirror);
-  }
-  onCmBlur(codemirror) {
-    console.debug("onCmBlur", codemirror);
-  }
-
   mounted() {
     setTimeout(() => {
       this.cmOption.styleActiveLine = true;
     }, 1800);
   }
 
-  getCodemirror(): any {
-    return (this.$refs.jsonEditor as any).codemirror;
+  onChange(v: string) {
+    this.$emit("input", v);
   }
 
-  /**
-   * 美化
-   */
-  prettify() {
-    this.$nextTick(() => {
-      this.getCodemirror().setValue(
-        JSON.stringify(JSON.parse(this.code), null, 2)
-      );
-    });
+  onClear() {
+    (this.$refs.codeMirror as any).clear();
   }
 }
 </script>

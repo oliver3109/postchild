@@ -1,10 +1,9 @@
 <template>
   <div class="request-params">
     <div class="tools-bar">
-      <div class="title">请求头列表</div>
+      <div class="title">请求体</div>
       <div class="right">
         <a-button icon="delete" @click="onClearAll"></a-button>
-        <!-- <a-button icon="form"></a-button> -->
         <a-button icon="plus" @click="onAdd"></a-button>
       </div>
     </div>
@@ -12,10 +11,10 @@
     <KeyValues
       v-if="list.length > 0"
       :list="list"
-      :keyTitle="'请求头'"
-      @remove="onRemoveHeaders"
+      :keyTitle="'参数'"
+      @remove="onRemoveFormData"
     ></KeyValues>
-    <a-empty v-else description="该请求没有任何请求头">
+    <a-empty v-else description="该请求没有任何请求体">
       <a-button icon="plus" @click="onAdd">新增</a-button>
     </a-empty>
   </div>
@@ -30,7 +29,7 @@ import { Watch } from "vue-property-decorator";
 @Component({
   components: { KeyValues },
 })
-export default class RequestHeaders extends Vue {
+export default class RequestMultipartFormData extends Vue {
   list = [{ key: "", value: "" }];
 
   @Watch("list", { deep: true })
@@ -42,7 +41,7 @@ export default class RequestHeaders extends Vue {
     this.list = [];
   }
 
-  onRemoveHeaders({ index }) {
+  onRemoveFormData({ index }) {
     const list = this.list;
     list.splice(index, 1);
     this.list = list;

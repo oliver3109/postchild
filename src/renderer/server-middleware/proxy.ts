@@ -6,8 +6,8 @@ import axios from "axios";
 app.use(bodyParser.json());
 
 app.all("/proxy", async (req, res) => {
-  const { url, method, params, headers } = req.body;
-  const resultRes = await axios({ url, method, params, headers });
+  const { url, method, params, headers, data } = req.body;
+  const resultRes = await axios({ url, method, params, data, headers });
   res.set("access-control-allow-headers", "*");
   res.set("access-control-allow-origin", "*");
   res.json({

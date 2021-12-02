@@ -1,11 +1,18 @@
-import { AxiosRequestHeaders, AxiosResponse, Method } from "axios";
+import {
+  AxiosRequestConfig,
+  AxiosRequestHeaders,
+  AxiosResponse,
+  CancelToken,
+  Method,
+} from "axios";
 import {
   getUrlHost,
   getUrlProtocolHostPath,
   getUrlParams,
   getUrlProtocolHost,
 } from "../url";
-import axios from "./_axios";
+import request from "./_axios";
+import axios from "axios";
 
 export class HttpRequest {
   static url?: string;
@@ -43,31 +50,39 @@ export class HttpRequest {
     return this;
   }
 
-  static async execute() {
+  static async execute(cancelFn?: (c) => void) {
     const { method, url, data, headers, params } = this;
-    const axiosConfig: Record<string, any> = {};
+    const axiosConfig: AxiosRequestConfig = {};
 
     const targetHost = getUrlHost(url);
 
-    if (targetHost != location.host) {
-      // 走代理
-      axiosConfig.method = "POST";
-      axiosConfig.data = {
+    const CancelToken = axios.CancelToken;
+    axiosConfig.cancelToken = new CancelToken(cancelFn);
+
+    // 如果当前环境是 GitHub Page 走我自己的服务器
+    if (process.env.DEPLOY_ENV === "GH_PAGES") {
+      return this.proxy(
+        `https://www.manito.fun/middleware/proxy`,
+        axiosConfig,
         method,
-        url: getUrlProtocolHostPath(url),
+        url,
         data,
         headers,
-        params: { ...getUrlParams(url), ...params },
-      };
-      axiosConfig.url = `${getUrlProtocolHost(location.href)}/middleware/proxy`;
+        params
+      );
+    }
 
-      axiosConfig.headers = {
-        "Content-Type": "application/json;charset=UTF-8",
-        "Access-Control-Allow-Origin": "*",
-      };
-
-      const request: AxiosResponse = await axios(axiosConfig);
-      return request;
+    if (targetHost != location.host) {
+      // 走代理
+      return this.proxy(
+        `${getUrlProtocolHost(location.href)}/middleware/proxy`,
+        axiosConfig,
+        method,
+        url,
+        data,
+        headers,
+        params
+      );
     } else {
       // 不走代理
       if (method) {
@@ -85,8 +100,45 @@ export class HttpRequest {
       if (params) {
         axiosConfig["params"] = params;
       }
-      const request: AxiosResponse = await axios(axiosConfig);
-      return request;
+      const response: AxiosResponse = await request(axiosConfig);
+      return response;
     }
+  }
+
+  /**
+   * 代理
+   * @param serverUrl
+   * @param method
+   * @param url
+   * @param data
+   * @param headers
+   * @param params
+   * @returns
+   */
+  static async proxy(
+    serverUrl,
+    axiosConfig,
+    method,
+    url,
+    data,
+    headers,
+    params
+  ) {
+    axiosConfig.method = "POST";
+    axiosConfig.data = {
+      method,
+      url: getUrlProtocolHostPath(url),
+      data,
+      headers,
+      params: { ...getUrlParams(url), ...params },
+    };
+    axiosConfig.url = serverUrl;
+
+    axiosConfig.headers = {
+      "Content-Type": "application/json;charset=UTF-8",
+      "Access-Control-Allow-Origin": "*",
+    };
+    const response: AxiosResponse = await request(axiosConfig);
+    return response;
   }
 }

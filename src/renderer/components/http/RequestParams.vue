@@ -4,16 +4,20 @@
       <div class="title">查询参数</div>
       <div class="right">
         <a-button icon="delete" @click="onClearAll"></a-button>
-        <a-button icon="form"></a-button>
+        <!-- <a-button icon="form"></a-button> -->
         <a-button icon="plus" @click="onAdd"></a-button>
       </div>
     </div>
 
     <KeyValues
+      v-if="list.length > 0"
       :list="list"
       :keyTitle="'参数'"
       @remove="onRemoveQueryParams"
     ></KeyValues>
+    <a-empty v-else description="该请求没有任何参数">
+      <a-button icon="plus" @click="onAdd">新增</a-button>
+    </a-empty>
   </div>
 </template>
 
@@ -35,9 +39,7 @@ export default class RequestParams extends Vue {
   }
 
   onClearAll() {
-    const list = this.list;
-    list.splice(1, list.length);
-    this.list = list;
+    this.list = [];
   }
 
   onRemoveQueryParams({ index }) {

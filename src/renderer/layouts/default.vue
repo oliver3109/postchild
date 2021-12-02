@@ -2,7 +2,12 @@
   <a-layout>
     <a-layout-header>
       <div class="left">
-        <img class="logo" src="../assets/images/logo.png" alt="" srcset="" />
+        <div class="logo">POSTCHILD</div>
+        <a href="https://github.com/OLIVERgZzy/postchild/stargazers"
+          ><img
+            alt="GitHub stars"
+            src="https://img.shields.io/github/stars/OLIVERgZzy/postchild?style=social"
+        /></a>
       </div>
       <div class="right"></div>
     </a-layout-header>
@@ -17,7 +22,7 @@
         <router-view />
       </a-layout-content>
     </a-layout>
-    <a-layout-footer>Footer</a-layout-footer>
+    <!-- <a-layout-footer>Footer</a-layout-footer> -->
   </a-layout>
 </template>
 
@@ -25,7 +30,7 @@
 .ant-layout {
   height: 100vh;
   .ant-layout-header {
-    height: 61px;
+    height: 45px;
     background: #fff;
     border-bottom: 0.5px solid #e0e0e0;
     display: flex;
@@ -33,8 +38,18 @@
     align-items: center;
     padding: 0 20px;
     line-height: none !important;
-    img {
-      height: 55px;
+    .left {
+      height: 45px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      .logo {
+        font-weight: bolder;
+        margin-right: 10px;
+        height: 45px;
+        line-height: 45px;
+        cursor: pointer;
+      }
     }
   }
   .ant-layout-sider {
@@ -51,6 +66,7 @@
       justify-content: center;
       align-items: center;
       color: #000;
+      cursor: pointer;
     }
   }
   .ant-layout-content {

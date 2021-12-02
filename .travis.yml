@@ -7,7 +7,7 @@ branches:
   only:
     - master
 script:
-  - npm run build:dist
+  - npm run nuxt:dist
 deploy:
   provider: pages
   skip-cleanup: true

@@ -25,10 +25,11 @@
   },
   "scripts": {
     "build:main": "tsc -p tsconfig.main.json",
-    "build:dist": "nuxt generate && yarn build:main",
+    "build:dist": "cross-env DEPLOY_ENV=GH_PAGES && nuxt generate && yarn build:main",
     "build:pack": "electron-builder",
     "build": "yarn build:dist && yarn build:pack",
     "dev": "yarn build:main && concurrently -k -n main,renderer -c blue,green \"cross-env NODE_ENV=development electron .\" \"nuxt dev\"",
+    "nuxt:dist": "cross-env DEPLOY_ENV=GH_PAGES && nuxt generate",
     "nuxt:dev": "yarn build:main && cross-env NODE_ENV=web nuxt"
   },
   "devDependencies": {
@@ -45,7 +46,8 @@
     "electron-devtools-installer": "^3.0.0",
     "sass": "^1.43.4",
     "sass-loader": "^10.2.0",
-    "typescript": "~3.8.3"
+    "typescript": "~3.8.3",
+    "vuex-module-decorators": "^2.0.0"
   },
   "license": "MIT",
   "dependencies": {

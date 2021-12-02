@@ -27,14 +27,13 @@ export default class CodeMirror extends Vue {
 
   @Watch("content")
   onContentChange(v) {
-    this.$emit("change", v);
     if (v) {
-      this.prettify(v);
+      this.prettify();
     }
   }
 
-  onCmCursorActivity(codemirror) {
-    console.debug("onCmCursorActivity", codemirror);
+  onCmCursorActivity() {
+    this.$emit("change", this.getCodemirror().getValue());
   }
   onCmReady(codemirror) {
     console.debug("onCmReady", codemirror);
@@ -53,23 +52,30 @@ export default class CodeMirror extends Vue {
   /**
    * 美化
    */
-  prettify(v) {
+  prettify() {
     this.$nextTick(() => {
-      let value = v;
-      if (typeof v === "string") {
+      let value = this.content;
+      if (typeof value === "string") {
         try {
-          value = JSON.parse(v);
+          value = JSON.parse(value);
           const str = JSON.stringify(value, null, 4);
           this.getCodemirror().setValue(str);
         } catch {
-          this.getCodemirror().setValue(v);
+          this.getCodemirror().setValue(value);
         }
       }
-      if (typeof v === "object") {
+      if (typeof value === "object") {
         const str = JSON.stringify(value, null, 4);
         this.getCodemirror().setValue(str);
       }
     });
+  }
+
+  /**
+   * 清空文本
+   */
+  clear() {
+    this.getCodemirror().setValue("");
   }
 }
 </script>
