@@ -1,11 +1,11 @@
 import { NuxtConfig } from "@nuxt/types";
 
-const env = process.env.NODE_ENV;
+const NODE_ENV = process.env.NODE_ENV;
 
 const config: NuxtConfig = {
   head: {
     titleTemplate: "%s",
-    title: "Postchild • 一个免费好看的API请求构建工具",
+    title: "Postchild • 一个API请求构建工具",
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -18,7 +18,7 @@ const config: NuxtConfig = {
         hid: "description",
         name: "description",
         content:
-          "模仿 Postman，搭建了一个免费好看的 API 请求构建工具，帮助您更高效的开发和测试。",
+          "模仿 Postman，搭建了一个 API 请求构建工具，帮助您更高效的开发和测试。",
       },
       {
         name: "X-UA-Compatible",
@@ -51,10 +51,10 @@ const config: NuxtConfig = {
   srcDir: "src/renderer",
   build: {
     extend(config, { isDev }) {
-      if (env === "web") {
+      if (NODE_ENV === "web") {
         config.target = "web";
       }
-      if (env === "development") {
+      if (NODE_ENV === "development") {
         config.target = "electron-renderer";
       }
     },
@@ -62,7 +62,12 @@ const config: NuxtConfig = {
   buildModules: [
     // ts
     "@nuxt/typescript-build",
+
+    "@nuxtjs/dotenv",
   ],
+  publicRuntimeConfig: {
+    nodeEnv: NODE_ENV,
+  },
   plugins: [
     "~/plugins/ant-design-vue",
     { src: "~/plugins/vue-codemirror", ssr: false },

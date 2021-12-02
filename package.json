@@ -29,11 +29,12 @@
     "build:pack": "electron-builder",
     "build": "yarn build:dist && yarn build:pack",
     "dev": "yarn build:main && concurrently -k -n main,renderer -c blue,green \"cross-env NODE_ENV=development electron .\" \"nuxt dev\"",
-    "generate:gh-pages": "cross-env DEPLOY_ENV=GH_PAGES nuxt generate",
+    "generate:gh-pages": "cross-env NODE_ENV=github nuxt generate",
     "nuxt:dev": "yarn build:main && cross-env NODE_ENV=web nuxt"
   },
   "devDependencies": {
     "@nuxt/typescript-build": "^2.1.0",
+    "@nuxtjs/dotenv": "^1.4.1",
     "@types/electron-devtools-installer": "^2.2.0",
     "@types/express": "^4.16.0",
     "@types/express-useragent": "^1.0.0",

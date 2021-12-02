@@ -65,8 +65,6 @@ export default class RequestMultipartFormData extends Vue {
         color: #7d7d7d;
       }
     }
-    .right {
-    }
   }
 }
 </style>
