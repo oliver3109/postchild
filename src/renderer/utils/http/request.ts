@@ -60,7 +60,7 @@ export class HttpRequest {
     axiosConfig.cancelToken = new CancelToken(cancelFn);
 
     // 如果当前环境是 GitHub Page 走我自己的服务器
-    if (process.env.nodeEnv == "github") {
+    if (process.env.NODE_ENV == "github") {
       return this.proxy(
         `https://www.manito.fun/middleware/proxy`,
         axiosConfig,
