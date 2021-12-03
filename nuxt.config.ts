@@ -34,6 +34,10 @@ const config: NuxtConfig = {
     host: "0.0.0.0",
   },
 
+  router: {
+    base: "/postchild/",
+  },
+
   buildDir: "dist/.nuxt",
   generate: { dir: "dist/renderer" },
   css: [

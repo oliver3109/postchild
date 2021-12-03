@@ -61,7 +61,7 @@ export class HttpRequest {
     // 如果当前环境是 GitHub Page 走我自己的服务器
     if (env === "github") {
       return this.proxy(
-        `https://proxy.postchild.top/middleware/proxy`,
+        `https://proxy.manito.fun/middleware/proxy`,
         axiosConfig,
         method,
         url,
