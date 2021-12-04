@@ -9,12 +9,21 @@ app.use(cors());
 
 app.all("/proxy", async (req, res) => {
   const { url, method, params, headers, data } = req.body;
-  const resultRes = await axios({ url, method, params, data, headers });
-  res.json({
-    status: resultRes.status,
-    data: resultRes.data,
-    size: Buffer.from(JSON.stringify(resultRes.data)).length,
-  });
+  try {
+    const resultRes = await axios({ url, method, params, data, headers });
+    res.json({
+      code: 0,
+      message: "success",
+      status: resultRes.status,
+      data: resultRes.data,
+      size: Buffer.from(JSON.stringify(resultRes.data)).length,
+    });
+  } catch (error) {
+    res.json({
+      code: -1,
+      message: error.message,
+    });
+  }
 });
 
 module.exports = app;

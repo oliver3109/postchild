@@ -127,8 +127,8 @@
     </div>
     <!-- 请求响应 -->
     <div class="request-response">
-      <a-spin tip="加载中..." :spinning="sending">
-        <div class="status-line" v-if="response.status">
+      <a-spin tip="加载中..." v-if="response.code != -1" :spinning="sending">
+        <div class="status-line">
           <div class="item">
             <span class="label">状态:</span>
             <span class="value">{{ response.status }}</span>
@@ -153,6 +153,17 @@
           <a-tab-pane key="2" tab="响应头"> </a-tab-pane>
         </a-tabs>
       </a-spin>
+
+      <a-result
+        v-else
+        status="warning"
+        title="无法发送请求"
+        :sub-title="response.message"
+      >
+        <template #extra>
+          <a-button type="primary"> 清空</a-button>
+        </template>
+      </a-result>
     </div>
   </div>
 </template>
@@ -197,6 +208,8 @@ export default class RestApi extends Vue {
 
   // 响应
   response = {
+    code: null,
+    message: null,
     body: null,
     status: null,
     time: null,
@@ -250,6 +263,8 @@ export default class RestApi extends Vue {
     if (res) {
       restStore.stop();
       this.$nuxt.$loading.finish();
+      this.response.code = (res as any).code;
+      this.response.message = (res as any).message;
       this.response.body = res.data;
       this.response.status = res.status;
       this.response.time = (res as any).time;

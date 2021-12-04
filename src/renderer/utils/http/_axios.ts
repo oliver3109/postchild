@@ -1,4 +1,5 @@
 import axios from "axios";
+import { message } from "ant-design-vue";
 
 const service = axios.create({
   withCredentials: false,
@@ -18,13 +19,21 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
   (response) => {
-    const res = response.data;
-    const requestTime = response.config.headers["x-postchild-request-start"];
-    res.time = +new Date() - +requestTime;
-    return res;
+    const data = response.data;
+    // 请求成功
+    if (data.code === 0) {
+      const requestTime = response.config.headers["x-postchild-request-start"];
+      data.time = +new Date() - +requestTime;
+      return data;
+    }
+    // 请求失败
+    if (data.code === -1) {
+      message.error(data.message);
+      return data;
+    }
   },
   (error) => {
-    console.error(error);
+    message.error(error);
     return Promise.reject(error);
   }
 );
