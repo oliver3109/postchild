@@ -93,7 +93,8 @@
               v-model="request.body"
             ></RequestBody>
 
-            <RequestMultipartFormData v-else> </RequestMultipartFormData>
+            <RequestMultipartFormData v-else v-model="request.formData">
+            </RequestMultipartFormData>
           </div>
         </a-tab-pane>
         <a-tab-pane key="3" tab="请求头" force-render>
@@ -128,7 +129,7 @@
     <!-- 请求响应 -->
     <div class="request-response">
       <a-spin tip="加载中..." v-if="response.code != -1" :spinning="sending">
-        <div class="status-line">
+        <div class="status-line" v-if="response.status">
           <div class="item">
             <span class="label">状态:</span>
             <span class="value">{{ response.status }}</span>
@@ -197,13 +198,14 @@ export default class RestApi extends Vue {
   }
 
   // 请求
-  request = {
+  request: PostChildRequest = {
     method: "GET",
     url: "http://suggest.taobao.com/sug?code=utf-8&q=手机&callback=cb",
     contentType: "无",
-    body: null,
-    queryParams: [{ key: "", value: "" }],
     headers: [{ key: "", value: "" }],
+    queryParams: [{ key: "", value: "" }],
+    body: null,
+    formData: [],
   };
 
   // 响应
@@ -230,7 +232,7 @@ export default class RestApi extends Vue {
   async onSend() {
     restStore.send();
     this.$nuxt.$loading.start();
-    const { method, url, queryParams, headers, contentType, body } =
+    const { method, url, queryParams, headers, contentType, body, formData } =
       this.request;
 
     //key Values 数组 转 object
@@ -247,11 +249,24 @@ export default class RestApi extends Vue {
     const httpRequestObj = HttpRequest.setMethod(method as any);
     httpRequestObj.setUrl(url);
     httpRequestObj.setParams(keyValueList2Object(queryParams || {}));
-    httpRequestObj.setData(body);
 
+    if (contentType === "multipart/form-data") {
+      const _formData = new FormData();
+      for (const item of formData) {
+        _formData.append(
+          item.key,
+          item.valueType == "file" ? item.file : item.value
+        );
+      }
+      httpRequestObj.setData(_formData);
+    } else {
+      httpRequestObj.setData(body);
+    }
+
+    // 设置header
     const _headers = keyValueList2Object(headers || {});
     if (contentType != "无") {
-      _headers["content-type"] = contentType;
+      _headers["Content-Type"] = contentType;
     }
     if (Object.keys(_headers).length > 0) {
       httpRequestObj.setHeaders(_headers);

@@ -12,7 +12,6 @@ import {
 } from "../url";
 import request from "./_axios";
 import axios from "axios";
-
 export class HttpRequest {
   static url?: string;
 
@@ -50,10 +49,9 @@ export class HttpRequest {
   }
 
   static async execute(env: string, cancelFn?: (c) => void) {
+    console.log("当前环境: " + env);
     const { method, url, data, headers, params } = this;
     const axiosConfig: AxiosRequestConfig = {};
-
-    const targetHost = getUrlHost(url);
 
     const CancelToken = axios.CancelToken;
     axiosConfig.cancelToken = new CancelToken(cancelFn);
@@ -71,9 +69,13 @@ export class HttpRequest {
       );
     }
 
-    // 其他环境
-    if (targetHost != location.host) {
-      // 走代理
+    // 如果当前环境是 Electron
+    if (env === "electron") {
+      // TODO
+    }
+
+    // 如果当前环境是 纯浏览器
+    if (env === "web") {
       return this.proxy(
         `${getUrlProtocolHost(location.href)}/middleware/proxy`,
         axiosConfig,
@@ -83,25 +85,6 @@ export class HttpRequest {
         headers,
         params
       );
-    } else {
-      // 不走代理
-      if (method) {
-        axiosConfig["method"] = method;
-      }
-      if (url) {
-        axiosConfig["url"] = url;
-      }
-      if (data) {
-        axiosConfig["data"] = data;
-      }
-      if (headers) {
-        axiosConfig["headers"] = headers;
-      }
-      if (params) {
-        axiosConfig["params"] = params;
-      }
-      const response: AxiosResponse = await request(axiosConfig);
-      return response;
     }
   }
 
@@ -138,6 +121,7 @@ export class HttpRequest {
       "Content-Type": "application/json;charset=UTF-8",
       "Access-Control-Allow-Origin": "*",
     };
+
     const response: AxiosResponse = await request(axiosConfig);
     return response;
   }

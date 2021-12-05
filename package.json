@@ -25,7 +25,7 @@
   },
   "scripts": {
     "build:main": "tsc -p tsconfig.main.json",
-    "build:dist": "nuxt generate && yarn build:main",
+    "build:dist": "cross-env NODE_ENV=electron nuxt generate && yarn build:main",
     "build:pack": "electron-builder",
     "build": "yarn build:dist && yarn build:pack",
     "dev": "yarn build:main && concurrently -k -n main,renderer -c blue,green \"cross-env NODE_ENV=development electron .\" \"nuxt dev\"",
