@@ -1,51 +1,24 @@
 {
-  "name": "electron-nuxt-ts",
-  "author": "Exeteres",
-  "description": "Electron + Nuxt + Typescript",
+  "name": "postchild",
+  "author": "Oliver",
+  "description": "postchild",
   "version": "0.0.1",
-  "main": "dist/main",
-  "build": {
-    "appId": "com.example.app",
-    "files": [
-      {
-        "from": "dist",
-        "to": "dist",
-        "filter": [
-          "main/**/*",
-          "renderer/**/*"
-        ]
-      },
-      {
-        "from": ".",
-        "filter": [
-          "package.json"
-        ]
-      }
-    ]
-  },
+  "main": "dist",
   "scripts": {
     "build:main": "tsc -p tsconfig.main.json",
-    "build:dist": "cross-env NODE_ENV=electron nuxt generate && yarn build:main",
-    "build:pack": "electron-builder",
-    "build": "yarn build:dist && yarn build:pack",
-    "dev": "yarn build:main && concurrently -k -n main,renderer -c blue,green \"cross-env NODE_ENV=development electron .\" \"nuxt dev\"",
-    "generate:gh-pages": "cross-env NODE_ENV=github nuxt generate",
-    "nuxt:dev": "yarn build:main && cross-env NODE_ENV=web nuxt"
+    "build:dist": "nuxt generate && yarn build:main",
+    "dev": "yarn build:main && cross-env NODE_ENV=web nuxt",
+    "generate:gh-pages": "cross-env NODE_ENV=github nuxt generate"
   },
   "devDependencies": {
     "@nuxt/typescript-build": "^2.1.0",
     "@nuxtjs/dotenv": "^1.4.1",
-    "@types/electron-devtools-installer": "^2.2.0",
     "@types/express": "^4.16.0",
     "@types/express-useragent": "^1.0.0",
     "@types/node": "^12.7.11",
-    "@types/wait-on": "^4.0.0",
     "concurrently": "^5.2.0",
     "cors": "^2.8.5",
     "cross-env": "^7.0.2",
-    "electron": "^8.5.2",
-    "electron-builder": "^22.6.0",
-    "electron-devtools-installer": "^3.0.0",
     "sass": "^1.43.4",
     "sass-loader": "^10.2.0",
     "typescript": "~3.8.3",
@@ -58,12 +31,10 @@
     "axios": "^0.24.0",
     "express": "^4.16.4",
     "express-useragent": "^1.0.13",
-    "get-port": "^5.1.1",
     "jsonlint": "^1.6.3",
     "nuxt": "^2.15.8",
     "nuxt-class-component": "^1.3.0",
     "nuxt-property-decorator": "^2.9.1",
-    "vue-codemirror": "^4.0.6",
-    "wait-on": "^5.0.0"
+    "vue-codemirror": "^4.0.6"
   }
 }

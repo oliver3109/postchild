@@ -44,7 +44,7 @@ const config: NuxtConfig = {
     "codemirror/addon/dialog/dialog.css",
     "codemirror/addon/fold/foldgutter.css",
   ],
-  srcDir: "src/renderer",
+  srcDir: "src",
   build: {
     extend(config, { isDev }) {
       if (NODE_ENV === "web") {

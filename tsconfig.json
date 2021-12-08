@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "outDir": "dist/main",
+        "outDir": "dist",
         "target": "ES2018",
         "module": "ESNext",
         "moduleResolution": "Node",
@@ -8,8 +8,8 @@
         "experimentalDecorators": true,
         "baseUrl": ".",
         "paths": {
-            "~/*": ["./src/renderer/*"],
-            "@/*": ["./src/renderer/*"]
+            "~/*": ["./src/*"],
+            "@/*": ["./src/*"]
         },
         "types": ["@types/node", "@nuxt/types"]
     },

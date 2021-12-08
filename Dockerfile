@@ -15,4 +15,4 @@ RUN npm install -g cnpm
 RUN cnpm install
 
 # 启动
-CMD ["yarn", "nuxt:dev"]
+CMD ["yarn", "dev"]

@@ -3,5 +3,5 @@
     "compilerOptions": {
         "module": "commonjs"
     },
-    "include": ["src/main/**/*.ts"]
+    "include": ["src/**/*.ts"]
 }
