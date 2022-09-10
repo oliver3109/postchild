@@ -2,6 +2,15 @@ import { NuxtConfig } from "@nuxt/types";
 
 const NODE_ENV = process.env.NODE_ENV;
 
+const routerBase =
+  NODE_ENV === "github"
+    ? {
+        router: {
+          base: "/postchild/",
+        },
+      }
+    : {};
+
 const config: NuxtConfig = {
   head: {
     titleTemplate: "%s",
@@ -33,6 +42,8 @@ const config: NuxtConfig = {
     port: 3000,
     host: "0.0.0.0",
   },
+
+  ...routerBase,
 
   buildDir: "dist/.nuxt",
   generate: { dir: "dist/renderer" },
